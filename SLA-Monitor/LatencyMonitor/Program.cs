@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,10 +13,11 @@ namespace LatencyMonitor
         static void Main(string[] args)
         {
             var pingProcessor = new PingProcessor();
-
             pingProcessor.Start();
 
-            Console.WriteLine("Started...");
+            var defaultHost = ConfigurationManager.AppSettings["DefaultHost"];
+            Console.WriteLine("Host: " + defaultHost);
+
             Console.ReadLine();
         }
     }
