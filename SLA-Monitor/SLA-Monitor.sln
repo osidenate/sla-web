@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLALauncher", "SLALauncher\SLALauncher.csproj", "{DE6028E7-A92A-492D-ACF3-DB05C5EB1B2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatencyMonitor", "LatencyMonitor\LatencyMonitor.csproj", "{D3822900-EBBE-4C7B-98E2-C34D549EAC9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatencyMonitorServices", "LatencyMonitorServices\LatencyMonitorServices.csproj", "{D3822900-EBBE-4C7B-98E2-C34D549EAC9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LatencyMonitor
+namespace LatencyMonitorServices
 {
     public delegate void PingResponseHandler(PingResponse response);
     public delegate void PingTimeoutHandler(PingResponse response);
