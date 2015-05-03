@@ -45,12 +45,16 @@
   <ItemGroup>
     <Compile Include="Launcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SLAStatusMonitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LatencyMonitorServices\LatencyMonitorServices.csproj">
       <Project>{d3822900-ebbe-4c7b-98e2-c34d549eac9a}</Project>
       <Name>LatencyMonitorServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

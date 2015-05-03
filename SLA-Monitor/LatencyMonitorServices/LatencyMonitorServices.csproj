@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="LatencyMonitor.cs" />
     <Compile Include="PingProcessor.cs" />
+    <Compile Include="PingModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

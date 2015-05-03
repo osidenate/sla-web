@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace LatencyMonitorServices
 {
-    public delegate void PingResponseHandler(PingResponse response);
-    public delegate void PingTimeoutHandler(PingResponse response);
-
     /// <summary>
-    /// Sends pings to hosts and calculates the RTT. Notifies listeners when a ping returns or times out.
+    /// Sends a ping to a host and calculates the RTT
     /// </summary>
     class PingProcessor
     {
-        public event PingResponseHandler Received;
-        public event PingTimeoutHandler Timedout;
-    }
+        public PingProcessor(PingRequest ping)
+        {
 
-    struct PingResponse
-    {
-        string host;
+        }
+
+        /// <summary>
+        /// Sends a ping synchrounously and waits Timeout ms for a reply
+        /// </summary>
+        public PingResponse Send()
+        {
+            return new PingResponse();
+        }
     }
 }
