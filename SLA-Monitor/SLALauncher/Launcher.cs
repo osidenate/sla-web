@@ -26,11 +26,17 @@ namespace SLALauncher
         {
             LoadConfig();
 
+            Console.WriteLine("Started SLA Monitor");
+            Console.WriteLine("Host: " + host);
+
             var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout);
             latencyMonitor.Start();
 
-            Console.WriteLine("Started SLA Monitor");
-            Console.WriteLine("Host: " + host);
+            Thread.Sleep(2500);
+
+            latencyMonitor.Stop();
+
+            Console.WriteLine("Done Monitoring.");
 
             Console.ReadLine();
         }
