@@ -15,11 +15,8 @@ namespace LatencyMonitorServices
     /// </summary>
     public class LatencyMonitor
     {
-        public delegate void PingResponseHandler(object sender, PingResponse response);
-        public delegate void PingTimeoutHandler(object sender, PingResponse response);
-
-        public event PingResponseHandler Received;
-        public event PingTimeoutHandler Timedout;
+        public delegate void PingResponseHandler(object sender, PingReply response);
+        public event PingResponseHandler PingCompleted;
 
         public bool IsMonitoring 
         { 
@@ -61,22 +58,23 @@ namespace LatencyMonitorServices
         {
             Console.WriteLine("Sending Ping...");
 
-            Task.Run<PingReply>(() =>
-            {
-                return new Ping().Send(_host, _timeout);
-            })
-            .ContinueWith(response => 
-            {
-                this.OnPingReturn(response);
-            });
-
-            // When the task comes back with the PingResponse, we will notify the listeners (Console output and Database log)
+            var ping = new Ping();
+            ping.PingCompleted += new PingCompletedEventHandler(OnPingCompleted);
+            ping.SendAsync(_host, _timeout);
         }
 
-        protected void OnPingReturn(Task<PingReply> response)
+        protected void OnPingCompleted(object sender, PingCompletedEventArgs e)
         {
-            //PingReply reply = response.Result;
-            Console.WriteLine("Notifying event handlers that a ping response was received...");
+            PingReply response = e.Reply;
+
+            if (e.Error != null)
+            {
+                Console.WriteLine("Ping failed:");
+                Console.WriteLine(e.Error.ToString());
+                return;
+            }
+
+            Console.WriteLine("Ping RTT: " + e.Reply.RoundtripTime + "ms");
         }
     }
 }
