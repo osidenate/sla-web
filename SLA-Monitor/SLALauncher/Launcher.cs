@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LatencyMonitorServices;
+using System.Net;
 
 namespace SLALauncher
 {
@@ -15,7 +16,7 @@ namespace SLALauncher
     class Launcher
     {
         // Config for the PingProcessor
-        private static string host;
+        private static IPAddress host;
         private static int pollingInterval;
         private static int timeout;
 
@@ -43,10 +44,17 @@ namespace SLALauncher
 
         private static void LoadConfig()
         {
-            host = ConfigurationManager.AppSettings["DefaultHost"];
-            pollingInterval = Int32.Parse(ConfigurationManager.AppSettings["DefaultPollingInterval"]);
-            timeout = Int32.Parse(ConfigurationManager.AppSettings["DefaultTimeout"]);
-
+            try
+            {
+                host = IPAddress.Parse(ConfigurationManager.AppSettings["DefaultHost"]);
+                pollingInterval = Int32.Parse(ConfigurationManager.AppSettings["DefaultPollingInterval"]);
+                timeout = Int32.Parse(ConfigurationManager.AppSettings["DefaultTimeout"]);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("The IP Address supplied in the config file is not valid.");
+                Environment.Exit(1);
+            }
             firebaseHost = "Placeholder Firebase Host";
         }
     }

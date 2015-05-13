@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -24,12 +26,12 @@ namespace LatencyMonitorServices
             get { return _pollingTimer.Enabled; } 
         }
 
-        private readonly string _host;
+        private readonly IPAddress _host;
         private readonly int _interval;
         private readonly int _timeout;
         private readonly Timer _pollingTimer;
 
-        public LatencyMonitor(string host, int interval, int timeout)
+        public LatencyMonitor(IPAddress host, int interval, int timeout)
         {
             _host = host;
             _interval = interval;
@@ -59,15 +61,22 @@ namespace LatencyMonitorServices
         {
             Console.WriteLine("Sending Ping...");
 
-            //var pingProcessor = new PingProcessor(new PingRequest());
-
-            //Task<PingResponse> pingTask = Task.Run<PingResponse>(() => pingProcessor.Send());
-            //pingTask.ContinueWith((pingResponse) =>
-            //{
-            //    Console.WriteLine("Notifying event handlers that a ping response was received...");
-            //});
+            Task.Run<PingReply>(() =>
+            {
+                return new Ping().Send(_host, _timeout);
+            })
+            .ContinueWith(response => 
+            {
+                this.OnPingReturn(response);
+            });
 
             // When the task comes back with the PingResponse, we will notify the listeners (Console output and Database log)
+        }
+
+        protected void OnPingReturn(Task<PingReply> response)
+        {
+            //PingReply reply = response.Result;
+            Console.WriteLine("Notifying event handlers that a ping response was received...");
         }
     }
 }
