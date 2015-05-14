@@ -15,8 +15,11 @@ namespace LatencyMonitorServices
     /// </summary>
     public class LatencyMonitor
     {
-        public delegate void PingResponseHandler(object sender, PingReply response);
+        public delegate void PingSendHandler(IPAddress host);
+        public delegate void PingResponseHandler(PingReply response);
+        public event PingSendHandler PingSent;
         public event PingResponseHandler PingCompleted;
+
 
         public bool IsMonitoring 
         { 
@@ -56,11 +59,11 @@ namespace LatencyMonitorServices
         /// </summary>
         protected void OnPingInterval(object sender, ElapsedEventArgs args)
         {
-            Console.WriteLine("Sending Ping...");
-
             var ping = new Ping();
             ping.PingCompleted += new PingCompletedEventHandler(OnPingCompleted);
             ping.SendAsync(_host, _timeout);
+            
+            PingSent(_host);
         }
 
         protected void OnPingCompleted(object sender, PingCompletedEventArgs e)
@@ -74,7 +77,7 @@ namespace LatencyMonitorServices
                 return;
             }
 
-            Console.WriteLine("Ping RTT: " + e.Reply.RoundtripTime + "ms");
+            PingCompleted(response);
         }
     }
 }
