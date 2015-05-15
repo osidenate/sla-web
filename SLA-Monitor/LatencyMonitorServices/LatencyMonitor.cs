@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace LatencyMonitorServices
+namespace SLAServices
 {
     /// <summary>
     /// Manages when pings are sent out to hosts.

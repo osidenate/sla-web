@@ -7,7 +7,7 @@
     <ProjectGuid>{D3822900-EBBE-4C7B-98E2-C34D549EAC9A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LatencyMonitorServices</RootNamespace>
+    <RootNamespace>SLAServices</RootNamespace>
     <AssemblyName>LatencyMonitor</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

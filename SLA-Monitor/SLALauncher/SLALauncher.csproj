@@ -48,9 +48,9 @@
     <Compile Include="PingConsoleLogger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LatencyMonitorServices\LatencyMonitorServices.csproj">
+    <ProjectReference Include="..\LatencyMonitorServices\SLAServices.csproj">
       <Project>{d3822900-ebbe-4c7b-98e2-c34d549eac9a}</Project>
-      <Name>LatencyMonitorServices</Name>
+      <Name>SLAServices</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
