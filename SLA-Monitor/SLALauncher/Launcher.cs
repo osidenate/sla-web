@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SLAServices;
+using LatencyMonitorService;
 using System.Net;
 
-namespace SLALauncher
+namespace LatencyMonitorService
 {
     /// <summary>
     /// Launches the SLA Monitor using the default config found in App.config
@@ -28,7 +28,7 @@ namespace SLALauncher
             LoadConfig();
 
             var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout);
-            var consoleLogger = new PingConsoleLogger(latencyMonitor);
+            var consoleLogger = new ConsoleLogger(latencyMonitor);
             latencyMonitor.Start();
 
             Thread.Sleep(1250);

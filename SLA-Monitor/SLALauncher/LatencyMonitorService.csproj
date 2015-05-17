@@ -7,7 +7,7 @@
     <ProjectGuid>{DE6028E7-A92A-492D-ACF3-DB05C5EB1B2A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SLALauncher</RootNamespace>
+    <RootNamespace>LatencyMonitorService</RootNamespace>
     <AssemblyName>SLALauncher</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,15 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LatencyMonitor.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PingConsoleLogger.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LatencyMonitorServices\SLAServices.csproj">
-      <Project>{d3822900-ebbe-4c7b-98e2-c34d549eac9a}</Project>
-      <Name>SLAServices</Name>
-    </ProjectReference>
+    <Compile Include="ConsoleLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
