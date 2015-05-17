@@ -22,6 +22,7 @@ namespace LatencyMonitorService
 
         // Config for Firebase
         private static string firebaseHost;
+        private static string firebaseSecret;
 
         static void Main(string[] args)
         {
@@ -29,6 +30,7 @@ namespace LatencyMonitorService
 
             var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout);
             var consoleLogger = new ConsoleLogger(latencyMonitor);
+            var firebaseLogger = new FirebaseLogger(latencyMonitor, firebaseHost, firebaseSecret);
             latencyMonitor.Start();
 
             Thread.Sleep(1250);
@@ -44,13 +46,15 @@ namespace LatencyMonitorService
                 host = IPAddress.Parse(ConfigurationManager.AppSettings["DefaultHost"]);
                 pollingInterval = Int32.Parse(ConfigurationManager.AppSettings["DefaultPollingInterval"]);
                 timeout = Int32.Parse(ConfigurationManager.AppSettings["DefaultTimeout"]);
+
+                firebaseHost = ConfigurationManager.AppSettings["FirebaseSecret"];
+                firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
             }
             catch (FormatException)
             {
                 Console.WriteLine("The IP Address supplied in the config file is not valid.");
                 Environment.Exit(1);
             }
-            firebaseHost = "Placeholder Firebase Host";
         }
     }
 }
