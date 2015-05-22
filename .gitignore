@@ -187,3 +187,7 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# Don't check in App.Debug.config or App.Release.config since they contain Firebase secrets
+App.Debug.config
+App.Release.config

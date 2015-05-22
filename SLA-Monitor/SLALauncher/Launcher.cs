@@ -33,7 +33,7 @@ namespace LatencyMonitorService
             var firebaseLogger = new FirebaseLogger(latencyMonitor, firebaseHost, firebaseSecret);
             latencyMonitor.Start();
 
-            Thread.Sleep(1250);
+            Thread.Sleep(8500);
             latencyMonitor.Stop();
 
             Console.ReadLine();
@@ -47,7 +47,7 @@ namespace LatencyMonitorService
                 pollingInterval = Int32.Parse(ConfigurationManager.AppSettings["DefaultPollingInterval"]);
                 timeout = Int32.Parse(ConfigurationManager.AppSettings["DefaultTimeout"]);
 
-                firebaseHost = ConfigurationManager.AppSettings["FirebaseSecret"];
+                firebaseHost = ConfigurationManager.AppSettings["FirebaseUri"];
                 firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
             }
             catch (FormatException)

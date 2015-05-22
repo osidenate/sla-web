@@ -30,6 +30,7 @@ namespace LatencyMonitorService
 
         private void OnPingCompleted(PingReply reply)
         {
+
             switch (reply.Status)
             {
                 case IPStatus.Success:
@@ -40,14 +41,30 @@ namespace LatencyMonitorService
                     LogTimeout(reply);
                     break;
             }
+
         }
 
-        private void LogSuccess(PingReply reply)
+        private async void LogSuccess(PingReply reply)
         {
-            //Task<PushResponse> pushTest = _client.PushAsync("pings", "test");
+            try
+            {
+                dynamic pingInfo = new
+                {
+                    address = reply.Address.ToString(),
+                    rtt = reply.RoundtripTime,
+                    status = reply.Status.ToString()
+                };
+
+                PushResponse pushTest = await _client.PushAsync("pings", pingInfo);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Could not log ping to Firebase.");
+                Console.WriteLine(ex);
+            }
         }
 
-        private void LogTimeout(PingReply reply)
+        private async void LogTimeout(PingReply reply)
         {
         }
     }
