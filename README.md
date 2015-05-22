@@ -17,7 +17,7 @@ import this JSON directly into a new Firebase App. This will setup the latency m
 Google's DNS servers and Level 3.
 
     {
-      "sla-monitor-config" : [ {
+      "slaMonitorConfig" : [ {
         "displayName" : "Google DNS",
         "host" : "8.8.8.8",
         "interval" : 4000,
