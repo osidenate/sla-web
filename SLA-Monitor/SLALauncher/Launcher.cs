@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LatencyMonitorService;
+using LatencyMonitorService.Loggers;
 using System.Net;
 
 namespace LatencyMonitorService
@@ -29,8 +29,13 @@ namespace LatencyMonitorService
             LoadConfig();
 
             var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout, "Test Host");
-            var consoleLogger = new ConsoleLogger(latencyMonitor);
-            var firebaseLogger = new FirebaseLogger(latencyMonitor, firebaseHost, firebaseSecret);
+            
+            new ConsoleLogger()
+                .SubscribeToMonitor(latencyMonitor);
+
+            new FirebaseLogger(firebaseHost, firebaseSecret)
+                .SubscribeToMonitor(latencyMonitor);
+
             latencyMonitor.Start();
 
             Thread.Sleep(8500);

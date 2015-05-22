@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LatencyMonitorService;
+using LatencyMonitorService.Loggers;
 using System.Net.NetworkInformation;
 using System.Net;
 
-namespace LatencyMonitorService
+namespace LatencyMonitorService.Loggers
 {
     /// <summary>
     /// Used for logging Ping events to the console.
     /// </summary>
-    internal class ConsoleLogger
+    internal class ConsoleLogger : ILogger
     {
-        public ConsoleLogger(LatencyMonitor latencyMonitor)
+        public ConsoleLogger() {}
+
+        public void SubscribeToMonitor(LatencyMonitor latencyMonitor)
         {
             latencyMonitor.PingSent += PrintSent;
             latencyMonitor.PingCompleted += OnPingCompleted;

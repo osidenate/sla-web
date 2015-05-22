@@ -9,16 +9,14 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LatencyMonitorService
+namespace LatencyMonitorService.Loggers
 {
     internal class FirebaseLogger
     {
         private readonly IFirebaseClient _client;
 
-        public FirebaseLogger(LatencyMonitor latencyMonitor, string firebaseUrl, string firebaseSecret)
+        public FirebaseLogger(string firebaseUrl, string firebaseSecret)
         {
-            latencyMonitor.PingCompleted += OnPingCompleted;
-
             IFirebaseConfig config = new FirebaseConfig
             {
                 BasePath = firebaseUrl,
@@ -26,6 +24,11 @@ namespace LatencyMonitorService
             };
 
             _client = new FirebaseClient(config);
+        }
+
+        public void SubscribeToMonitor(LatencyMonitor latencyMonitor) 
+        {
+            latencyMonitor.PingCompleted += OnPingCompleted;
         }
 
         private async void OnPingCompleted(PingReply reply)
