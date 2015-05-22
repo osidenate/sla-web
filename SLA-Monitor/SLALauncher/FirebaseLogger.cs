@@ -44,7 +44,11 @@ namespace LatencyMonitorService
                     status = reply.Status.ToString(),
 
                     // Outputs an ISO-8601 formatted date
-                    datetime = DateTime.UtcNow.ToString("o")
+                    datetime = DateTime.UtcNow.ToString("o"),
+
+                    // This name will be shown on the GUI rather than the IP Address
+                    // This is to prevent public clients from knowing the exact nodes we are monitoring
+                    displayName = "Test Host"
                 };
 
                 PushResponse pushTest = await _client.PushAsync("pings", pingInfo);

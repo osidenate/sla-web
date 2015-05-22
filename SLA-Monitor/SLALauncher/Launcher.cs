@@ -28,7 +28,7 @@ namespace LatencyMonitorService
         {
             LoadConfig();
 
-            var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout);
+            var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout, "Test Host");
             var consoleLogger = new ConsoleLogger(latencyMonitor);
             var firebaseLogger = new FirebaseLogger(latencyMonitor, firebaseHost, firebaseSecret);
             latencyMonitor.Start();

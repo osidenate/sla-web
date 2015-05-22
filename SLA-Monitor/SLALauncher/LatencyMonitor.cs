@@ -30,12 +30,14 @@ namespace LatencyMonitorService
         private readonly int _interval;
         private readonly int _timeout;
         private readonly Timer _pollingTimer;
+        private readonly string _displayName;
 
-        public LatencyMonitor(IPAddress host, int interval, int timeout)
+        public LatencyMonitor(IPAddress host, int interval, int timeout, string displayName)
         {
             _host = host;
             _interval = interval;
             _timeout = timeout;
+            _displayName = displayName;
 
             _pollingTimer = new Timer(_interval);
             _pollingTimer.Elapsed += OnPingInterval;
