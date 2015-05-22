@@ -28,31 +28,23 @@ namespace LatencyMonitorService
             _client = new FirebaseClient(config);
         }
 
-        private void OnPingCompleted(PingReply reply)
-        {
-
-            switch (reply.Status)
-            {
-                case IPStatus.Success:
-                    LogSuccess(reply);
-                    break;
-
-                case IPStatus.TimedOut:
-                    LogTimeout(reply);
-                    break;
-            }
-
-        }
-
-        private async void LogSuccess(PingReply reply)
+        private async void OnPingCompleted(PingReply reply)
         {
             try
             {
                 dynamic pingInfo = new
                 {
+                    // The IP Address that we just pinged
                     address = reply.Address.ToString(),
+
+                    // Latency in milliseconds
                     rtt = reply.RoundtripTime,
-                    status = reply.Status.ToString()
+
+                    // Status: Success / Timeout
+                    status = reply.Status.ToString(),
+
+                    // Outputs an ISO-8601 formatted date
+                    datetime = DateTime.UtcNow.ToString("o")
                 };
 
                 PushResponse pushTest = await _client.PushAsync("pings", pingInfo);
@@ -62,10 +54,6 @@ namespace LatencyMonitorService
                 Console.WriteLine("Could not log ping to Firebase.");
                 Console.WriteLine(ex);
             }
-        }
-
-        private async void LogTimeout(PingReply reply)
-        {
         }
     }
 }
