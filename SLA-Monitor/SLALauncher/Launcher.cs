@@ -28,18 +28,25 @@ namespace LatencyMonitorService
         {
             LoadConfig();
 
+            // TODO Load latency monitors & configuration from firebase so that it can be configured by the client app
+
             var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout, "Test Host");
-            
+            var latencyMonitor2 = new LatencyMonitor(IPAddress.Parse("4.2.2.1"), pollingInterval + 25, timeout, "Test Host 2");
+
             new ConsoleLogger()
-                .SubscribeToMonitor(latencyMonitor);
+                .SubscribeToMonitor(latencyMonitor)
+                .SubscribeToMonitor(latencyMonitor2);
 
             new FirebaseLogger(firebaseHost, firebaseSecret)
-                .SubscribeToMonitor(latencyMonitor);
+                .SubscribeToMonitor(latencyMonitor)
+                .SubscribeToMonitor(latencyMonitor2);
 
             latencyMonitor.Start();
+            latencyMonitor2.Start();
 
             Thread.Sleep(8500);
             latencyMonitor.Stop();
+            latencyMonitor2.Stop();
 
             Console.ReadLine();
         }

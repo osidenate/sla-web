@@ -11,7 +11,10 @@ using System.Threading.Tasks;
 
 namespace LatencyMonitorService.Loggers
 {
-    internal class FirebaseLogger
+    /// <summary>
+    /// Used for logging LatencyMonitor events to Firebase
+    /// </summary>
+    internal class FirebaseLogger : ILogger
     {
         private readonly IFirebaseClient _client;
 
@@ -26,9 +29,11 @@ namespace LatencyMonitorService.Loggers
             _client = new FirebaseClient(config);
         }
 
-        public void SubscribeToMonitor(LatencyMonitor latencyMonitor) 
+        public ILogger SubscribeToMonitor(LatencyMonitor latencyMonitor) 
         {
             latencyMonitor.PingCompleted += OnPingCompleted;
+            
+            return this;
         }
 
         private async void OnPingCompleted(PingReply reply)

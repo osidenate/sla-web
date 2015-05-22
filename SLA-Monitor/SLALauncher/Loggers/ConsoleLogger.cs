@@ -10,16 +10,18 @@ using System.Net;
 namespace LatencyMonitorService.Loggers
 {
     /// <summary>
-    /// Used for logging Ping events to the console.
+    /// Used for logging LatencyMonitor events to the console.
     /// </summary>
     internal class ConsoleLogger : ILogger
     {
         public ConsoleLogger() {}
 
-        public void SubscribeToMonitor(LatencyMonitor latencyMonitor)
+        public ILogger SubscribeToMonitor(LatencyMonitor latencyMonitor)
         {
             latencyMonitor.PingSent += PrintSent;
             latencyMonitor.PingCompleted += OnPingCompleted;
+
+            return this;
         }
 
         private void OnPingCompleted(PingReply reply)

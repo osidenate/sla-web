@@ -8,6 +8,6 @@ namespace LatencyMonitorService.Loggers
 {
     internal interface ILogger
     {
-        void SubscribeToMonitor(LatencyMonitor monitor);
+        ILogger SubscribeToMonitor(LatencyMonitor monitor);
     }
 }
