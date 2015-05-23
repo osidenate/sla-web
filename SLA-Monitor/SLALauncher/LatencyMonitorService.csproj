@@ -74,6 +74,7 @@
     <Compile Include="Loggers\ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

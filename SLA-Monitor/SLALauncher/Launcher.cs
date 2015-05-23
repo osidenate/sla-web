@@ -78,8 +78,10 @@ namespace LatencyMonitorService
         
         private void SubscribeLoggers()
         {
+            string serverAddress = Utility.GetPublicIP();
+
             consoleLogger = new ConsoleLogger();
-            firebaseLogger = new FirebaseLogger(firebaseHost, firebaseSecret);
+            firebaseLogger = new FirebaseLogger(firebaseHost, firebaseSecret, serverAddress);
 
             foreach (var monitor in latencyMonitors)
             {

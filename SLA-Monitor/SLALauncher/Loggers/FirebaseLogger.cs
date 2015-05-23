@@ -17,8 +17,9 @@ namespace LatencyMonitorService.Loggers
     internal class FirebaseLogger : ILogger
     {
         private readonly IFirebaseClient _client;
+        private readonly string fromIpAddress;
 
-        public FirebaseLogger(string firebaseUrl, string firebaseSecret)
+        public FirebaseLogger(string firebaseUrl, string firebaseSecret, string fromIpAddress)
         {
             IFirebaseConfig config = new FirebaseConfig
             {
@@ -27,6 +28,7 @@ namespace LatencyMonitorService.Loggers
             };
 
             _client = new FirebaseClient(config);
+            this.fromIpAddress = fromIpAddress;
         }
 
         public void SubscribeToMonitor(LatencyMonitor latencyMonitor) 
@@ -40,6 +42,8 @@ namespace LatencyMonitorService.Loggers
             {
                 dynamic pingInfo = new
                 {
+                    fromIpAddress = this.fromIpAddress,
+                    
                     // The IP Address that we just pinged
                     address = reply.Address.ToString(),
 
