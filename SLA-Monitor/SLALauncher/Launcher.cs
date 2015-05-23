@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using LatencyMonitorService.Loggers;
 using System.Net;
+using FireSharp.Config;
+using FireSharp;
 
 namespace LatencyMonitorService
 {
@@ -15,58 +17,91 @@ namespace LatencyMonitorService
     /// </summary>
     class Launcher
     {
-        // Config for the PingProcessor
-        private static IPAddress host;
-        private static int pollingInterval;
-        private static int timeout;
-
         // Config for Firebase
         private static string firebaseHost;
         private static string firebaseSecret;
+        private static bool useFirebaseConfig;
+
+        private static List<LatencyMonitor> latencyMonitors;
+        private static ConsoleLogger consoleLogger;
+        private static FirebaseLogger firebaseLogger;
 
         static void Main(string[] args)
         {
-            LoadConfig();
+            // Loads the firebase info from App.config 
+            LoadAppConfig();
 
-            // TODO Load latency monitors & configuration from firebase so that it can be configured by the client app
+            // Gets the latency monitor configuration from Firebase
+            LoadFirebaseLatencyMonitorConfig()
+                .ContinueWith(task => 
+                {
+                    List<LatencyMonitorConfig> configs = task.Result;
+                    latencyMonitors = GenerateLatencyMonitors(configs);
 
-            var latencyMonitor = new LatencyMonitor(host, pollingInterval, timeout, "Test Host");
-            var latencyMonitor2 = new LatencyMonitor(IPAddress.Parse("4.2.2.1"), pollingInterval + 25, timeout, "Test Host 2");
-
-            new ConsoleLogger()
-                .SubscribeToMonitor(latencyMonitor)
-                .SubscribeToMonitor(latencyMonitor2);
-
-            new FirebaseLogger(firebaseHost, firebaseSecret)
-                .SubscribeToMonitor(latencyMonitor)
-                .SubscribeToMonitor(latencyMonitor2);
-
-            latencyMonitor.Start();
-            latencyMonitor2.Start();
-
-            Thread.Sleep(8500);
-            latencyMonitor.Stop();
-            latencyMonitor2.Stop();
+                    SubscribeLoggers();
+                    StartLatencyMonitors();
+                });
 
             Console.ReadLine();
+
+            StopLatencyMonitors();
         }
 
-        private static void LoadConfig()
+        private static void LoadAppConfig()
         {
-            try
-            {
-                host = IPAddress.Parse(ConfigurationManager.AppSettings["DefaultHost"]);
-                pollingInterval = Int32.Parse(ConfigurationManager.AppSettings["DefaultPollingInterval"]);
-                timeout = Int32.Parse(ConfigurationManager.AppSettings["DefaultTimeout"]);
+            firebaseHost = ConfigurationManager.AppSettings["FirebaseUri"];
+            firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
+            useFirebaseConfig = Convert.ToBoolean(ConfigurationManager.AppSettings["UseFirebaseLatencyMonitorConfig"]);
+        }
 
-                firebaseHost = ConfigurationManager.AppSettings["FirebaseUri"];
-                firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
-            }
-            catch (FormatException)
+        /// <summary>
+        /// Loads the LatencyMonitor configuration from firebase
+        /// </summary>
+        private static async Task<List<LatencyMonitorConfig>> LoadFirebaseLatencyMonitorConfig()
+        {
+            IFirebaseConfig config = new FirebaseConfig
             {
-                Console.WriteLine("The IP Address supplied in the config file is not valid.");
-                Environment.Exit(1);
+                BasePath = firebaseHost,
+                AuthSecret = firebaseSecret
+            };
+
+            var client = new FirebaseClient(config);
+            var response = await client.GetAsync("slaMonitorConfig");
+            return response.ResultAs<List<LatencyMonitorConfig>>();
+        }
+
+        private static void SubscribeLoggers()
+        {
+            consoleLogger = new ConsoleLogger();
+            firebaseLogger = new FirebaseLogger(firebaseHost, firebaseSecret);
+
+            foreach (var monitor in latencyMonitors)
+            {
+                consoleLogger.SubscribeToMonitor(monitor);
+                firebaseLogger.SubscribeToMonitor(monitor);
             }
+        }
+
+        private static List<LatencyMonitor> GenerateLatencyMonitors(List<LatencyMonitorConfig> configs)
+        {
+            var latencyMonitors = new List<LatencyMonitor>();
+
+            foreach (var config in configs)
+            {
+                latencyMonitors.Add(new LatencyMonitor(config));
+            }
+
+            return latencyMonitors;
+        }
+
+        private static void StartLatencyMonitors()
+        {
+            latencyMonitors.ForEach(monitor => monitor.Start());
+        }
+
+        private static void StopLatencyMonitors()
+        {
+            latencyMonitors.ForEach(monitor => monitor.Stop());
         }
     }
 }

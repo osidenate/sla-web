@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LatencyMonitorConfig.cs" />
     <Compile Include="Loggers\FirebaseLogger.cs" />
     <Compile Include="LatencyMonitor.cs" />
     <Compile Include="Launcher.cs" />

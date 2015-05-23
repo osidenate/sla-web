@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LatencyMonitorService.Loggers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,7 +21,6 @@ namespace LatencyMonitorService
         public event PingSendHandler PingSent;
         public event PingResponseHandler PingCompleted;
 
-
         public bool IsMonitoring 
         { 
             get { return _pollingTimer.Enabled; } 
@@ -32,12 +32,12 @@ namespace LatencyMonitorService
         private readonly Timer _pollingTimer;
         private readonly string _displayName;
 
-        public LatencyMonitor(IPAddress host, int interval, int timeout, string displayName)
+        public LatencyMonitor(LatencyMonitorConfig config)
         {
-            _host = host;
-            _interval = interval;
-            _timeout = timeout;
-            _displayName = displayName;
+            _host = config.IPAddress;
+            _interval = config.Interval;
+            _timeout = config.Timeout;
+            _displayName = config.DisplayName;
 
             _pollingTimer = new Timer(_interval);
             _pollingTimer.Elapsed += OnPingInterval;
