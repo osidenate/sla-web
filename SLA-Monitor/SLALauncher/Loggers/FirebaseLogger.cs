@@ -29,11 +29,9 @@ namespace LatencyMonitorService.Loggers
             _client = new FirebaseClient(config);
         }
 
-        public ILogger SubscribeToMonitor(LatencyMonitor latencyMonitor) 
+        public void SubscribeToMonitor(LatencyMonitor latencyMonitor) 
         {
             latencyMonitor.PingCompleted += OnPingCompleted;
-            
-            return this;
         }
 
         private async void OnPingCompleted(PingReply reply)

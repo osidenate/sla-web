@@ -16,12 +16,10 @@ namespace LatencyMonitorService.Loggers
     {
         public ConsoleLogger() {}
 
-        public ILogger SubscribeToMonitor(LatencyMonitor latencyMonitor)
+        public void SubscribeToMonitor(LatencyMonitor latencyMonitor)
         {
             latencyMonitor.PingSent += PrintSent;
             latencyMonitor.PingCompleted += OnPingCompleted;
-
-            return this;
         }
 
         private void OnPingCompleted(PingReply reply)
@@ -38,12 +36,8 @@ namespace LatencyMonitorService.Loggers
             }
         }
 
-        private void PrintSent(IPAddress pingSender)
-        {
-            Console.WriteLine();
-            Console.WriteLine("Sending Ping to " + pingSender.ToString());
-        }
-
+        private void PrintSent(IPAddress pingSender) {}
+        
         private void PrintSuccess(PingReply reply)
         {
             Console.WriteLine();
