@@ -13,50 +13,47 @@ using FireSharp;
 namespace LatencyMonitorService
 {
     /// <summary>
-    /// Launches the SLA Monitor using the default config found in App.config
+    /// Loads the configuration information from Firebase and launches the LatencyMonitors
     /// </summary>
     class Launcher
     {
-        // Config for Firebase
         private static string firebaseHost;
         private static string firebaseSecret;
-        private static bool useFirebaseConfig;
 
-        private static List<LatencyMonitor> latencyMonitors;
-        private static ConsoleLogger consoleLogger;
-        private static FirebaseLogger firebaseLogger;
+        private List<LatencyMonitor> latencyMonitors;
+        private ConsoleLogger consoleLogger;
+        private FirebaseLogger firebaseLogger;
 
         static void Main(string[] args)
         {
             // Loads the firebase info from App.config 
-            LoadAppConfig();
+            firebaseHost = ConfigurationManager.AppSettings["FirebaseUri"];
+            firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
 
+            var slaLauncher = new Launcher();
+            
+            Console.ReadLine();
+            slaLauncher.StopLatencyMonitors();
+        }
+
+        public Launcher()
+        {
             // Gets the latency monitor configuration from Firebase
             LoadFirebaseLatencyMonitorConfig()
-                .ContinueWith(task => 
+                .ContinueWith(configTask =>
                 {
-                    List<LatencyMonitorConfig> configs = task.Result;
-                    latencyMonitors = GenerateLatencyMonitors(configs);
+                    List<LatencyMonitorConfig> configs = configTask.Result;
+                    GenerateLatencyMonitors(configs);
 
                     SubscribeLoggers();
                     StartLatencyMonitors();
                 });
-
-            Console.ReadLine();
-            StopLatencyMonitors();
-        }
-
-        private static void LoadAppConfig()
-        {
-            firebaseHost = ConfigurationManager.AppSettings["FirebaseUri"];
-            firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
-            useFirebaseConfig = Convert.ToBoolean(ConfigurationManager.AppSettings["UseFirebaseLatencyMonitorConfig"]);
         }
 
         /// <summary>
         /// Loads the LatencyMonitor configuration from firebase
         /// </summary>
-        private static async Task<List<LatencyMonitorConfig>> LoadFirebaseLatencyMonitorConfig()
+        private async Task<List<LatencyMonitorConfig>> LoadFirebaseLatencyMonitorConfig()
         {
             IFirebaseConfig config = new FirebaseConfig
             {
@@ -69,7 +66,17 @@ namespace LatencyMonitorService
             return response.ResultAs<List<LatencyMonitorConfig>>();
         }
 
-        private static void SubscribeLoggers()
+        private void GenerateLatencyMonitors(List<LatencyMonitorConfig> configs)
+        {
+            latencyMonitors = new List<LatencyMonitor>();
+
+            foreach (var config in configs)
+            {
+                latencyMonitors.Add(new LatencyMonitor(config));
+            }
+        }
+        
+        private void SubscribeLoggers()
         {
             consoleLogger = new ConsoleLogger();
             firebaseLogger = new FirebaseLogger(firebaseHost, firebaseSecret);
@@ -81,24 +88,12 @@ namespace LatencyMonitorService
             }
         }
 
-        private static List<LatencyMonitor> GenerateLatencyMonitors(List<LatencyMonitorConfig> configs)
-        {
-            var latencyMonitors = new List<LatencyMonitor>();
-
-            foreach (var config in configs)
-            {
-                latencyMonitors.Add(new LatencyMonitor(config));
-            }
-
-            return latencyMonitors;
-        }
-
-        private static void StartLatencyMonitors()
+        private void StartLatencyMonitors()
         {
             latencyMonitors.ForEach(monitor => monitor.Start());
         }
 
-        private static void StopLatencyMonitors()
+        private void StopLatencyMonitors()
         {
             if (latencyMonitors != null)
             {
