@@ -43,7 +43,6 @@ namespace LatencyMonitorService
                 });
 
             Console.ReadLine();
-
             StopLatencyMonitors();
         }
 
@@ -101,7 +100,10 @@ namespace LatencyMonitorService
 
         private static void StopLatencyMonitors()
         {
-            latencyMonitors.ForEach(monitor => monitor.Stop());
+            if (latencyMonitors != null)
+            {
+                latencyMonitors.ForEach(monitor => monitor.Stop());
+            }
         }
     }
 }

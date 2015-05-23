@@ -22,10 +22,10 @@ namespace LatencyMonitorService.Loggers
             }
         }
 
-        public LatencyMonitorConfig(string host, int pollingInterval, int timeout, string displayName)
+        public LatencyMonitorConfig(string host, int interval, int timeout, string displayName)
         {
             this.Host = host;
-            this.Interval = pollingInterval;
+            this.Interval = interval;
             this.Timeout = timeout;
             this.DisplayName = displayName;
         }
