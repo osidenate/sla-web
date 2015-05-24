@@ -18,9 +18,13 @@ namespace LatencyMonitorService.Loggers
     {
         private readonly IFirebaseClient _client;
         private readonly string fromIpAddress;
+        private readonly string fromDisplayName;
 
-        public FirebaseLogger(string firebaseUrl, string firebaseSecret, string fromIpAddress)
+        public FirebaseLogger(string firebaseUrl, string firebaseSecret, string fromIpAddress, string fromDisplayName)
         {
+            this.fromIpAddress = fromIpAddress;
+            this.fromDisplayName = fromDisplayName;
+
             IFirebaseConfig config = new FirebaseConfig
             {
                 BasePath = firebaseUrl,
@@ -28,7 +32,6 @@ namespace LatencyMonitorService.Loggers
             };
 
             _client = new FirebaseClient(config);
-            this.fromIpAddress = fromIpAddress;
         }
 
         public void SubscribeToMonitor(LatencyMonitor latencyMonitor) 
@@ -36,7 +39,7 @@ namespace LatencyMonitorService.Loggers
             latencyMonitor.PingCompleted += OnPingCompleted;
         }
 
-        private async void OnPingCompleted(PingReply reply)
+        private async void OnPingCompleted(PingReply reply, string toDisplayName)
         {
             try
             {
@@ -57,9 +60,9 @@ namespace LatencyMonitorService.Loggers
                     // Outputs an ISO-8601 formatted date
                     datetime = DateTime.UtcNow.ToString("o"),
 
-                    // This name will be shown on the GUI rather than the IP Address
-                    // This is to prevent public clients from knowing the exact nodes we are monitoring
-                    displayName = "Test Host"
+                    fromDisplayName = this.fromDisplayName,
+
+                    toDisplayName = toDisplayName
                 };
 
                 PushResponse pushTest = await _client.PushAsync("pings", pingInfo);

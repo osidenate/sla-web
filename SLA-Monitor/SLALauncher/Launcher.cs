@@ -19,6 +19,7 @@ namespace LatencyMonitorService
     {
         private static string firebaseHost;
         private static string firebaseSecret;
+        private static string fromDisplayName;
 
         private List<LatencyMonitor> latencyMonitors;
         private ConsoleLogger consoleLogger;
@@ -29,6 +30,7 @@ namespace LatencyMonitorService
             // Loads the firebase info from App.config 
             firebaseHost = ConfigurationManager.AppSettings["FirebaseUri"];
             firebaseSecret = ConfigurationManager.AppSettings["FirebaseSecret"];
+            fromDisplayName = ConfigurationManager.AppSettings["FromDisplayName"];
 
             Console.WriteLine("Starting Latency Monitor...");
 
@@ -86,7 +88,7 @@ namespace LatencyMonitorService
             Console.WriteLine("Pings will be logged from address: " + serverAddress);
 
             consoleLogger = new ConsoleLogger();
-            firebaseLogger = new FirebaseLogger(firebaseHost, firebaseSecret, serverAddress);
+            firebaseLogger = new FirebaseLogger(firebaseHost, firebaseSecret, serverAddress, fromDisplayName);
 
             foreach (var monitor in latencyMonitors)
             {
