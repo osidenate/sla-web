@@ -18,38 +18,12 @@ namespace LatencyMonitorService.Loggers
 
         public void SubscribeToMonitor(LatencyMonitor latencyMonitor)
         {
-            latencyMonitor.PingSent += PrintSent;
             latencyMonitor.PingCompleted += OnPingCompleted;
         }
 
         private void OnPingCompleted(PingReply reply)
         {
-            switch (reply.Status)
-            {
-                case IPStatus.Success:
-                    PrintSuccess(reply);
-                    break;
-
-                case IPStatus.TimedOut:
-                    PrintTimeout(reply);
-                    break;
-            }
-        }
-
-        private void PrintSent(IPAddress pingSender) {}
-        
-        private void PrintSuccess(PingReply reply)
-        {
-            Console.WriteLine();
-            Console.WriteLine("IP Address: " + reply.Address);
-            Console.WriteLine("RoundTrip time: " + reply.RoundtripTime);
-        }
-
-        private void PrintTimeout(PingReply reply)
-        {
-            Console.WriteLine();
-            Console.WriteLine("IP Address: " + reply.Address);
-            Console.WriteLine("RoundTrip time: " + reply.RoundtripTime);
+            Console.WriteLine("Received Pong from " + reply.Address + ", RTT: " + reply.RoundtripTime + "ms.");
         }
     }
 }

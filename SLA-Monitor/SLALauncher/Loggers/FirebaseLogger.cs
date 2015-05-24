@@ -42,10 +42,11 @@ namespace LatencyMonitorService.Loggers
             {
                 dynamic pingInfo = new
                 {
+                    // Public IP Address of the server the latency monitor is on
                     fromIpAddress = this.fromIpAddress,
                     
                     // The IP Address that we just pinged
-                    address = reply.Address.ToString(),
+                    toIpAddress = reply.Address.ToString(),
 
                     // Latency in milliseconds
                     rtt = reply.RoundtripTime,
