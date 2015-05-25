@@ -1,0 +1,16 @@
+{
+  "name": "sla-web-client",
+  "version": "0.0.1",
+  "homepage": "https://github.com/osidenate/sla-monitor",
+  "authors": [
+    "Nathan Nelson <osidenate@gmail.com>"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "firebase": "~2.2.5"
+  }
+}
