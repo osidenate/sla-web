@@ -1,0 +1,16 @@
+{
+  "name": "sla-web-client",
+  "version": "0.0.1",
+  "author": "Nathan Nelson",
+  "description": "",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/osidenate/sla-monitor.git"
+  }
+}
