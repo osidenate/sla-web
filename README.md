@@ -6,12 +6,12 @@ In the future, I would like to have this service running on a few nodes in
 different geographic locations and different ISPs.
 With enough data, over time, we can create a database of the quality of different ISPs.
 
-## SLA Service
+### SLA Service
 The SLA service is used to monitor the latency between the a computer and other nodes.
 It is a .NET Console application that loads it's configuration from Firebase
 and logs the latency information to Firebase.
 
-### Initial Firebase Setup
+#### Initial Firebase Setup
 The latency monitor configuration should be stored in the specified format. To get started quickly,
 import this JSON directly into a new Firebase App. This will setup the latency monitors to target
 Google's DNS servers and Level 3.
@@ -30,5 +30,19 @@ Google's DNS servers and Level 3.
       } ]
     }
     
+### SLA Web Client
+The SLA Web Client is used to view real-time data concerning the SLA Monitors. It is a standalone web app.
 
+#### Setting up the SLA Web Client
+Install the npm dependencies:
+`npm install`
+
+Install the bower dependencies:
+`bower install`
+
+Load the typescript definitions:
+`grunt setup`
+
+Build the project:
+`grunt build`
 
