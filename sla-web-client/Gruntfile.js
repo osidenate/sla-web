@@ -1,12 +1,14 @@
 'use strict';
 
 module.exports = function(grunt) {
-
     var slaConfig = {
         app: 'src/',
         dist: 'dist/',
-        scripts: 'src/scripts/'
+        scripts: 'src/scripts/',
+        tsd: 'src/typings/'
     };
+
+    require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
         sla: slaConfig,
@@ -23,22 +25,41 @@ module.exports = function(grunt) {
 
         ts: {
             options: {
-                compile: true,                  // perform compilation. [true (default) | false]
-                comments: false,                // same as !removeComments. [true | false (default)]
-                target: 'es5',                  // target javascript language. [es3 (default) | es5]
-                declaration: false              // generate a declaration .d.ts file for every output js file. [true | false (default)]
+                compile: true,
+                comments: false,
+                target: 'es5',
+                declaration: false,
+                sourceMap: false
             },
             clientMain: {
-                src: '<%= sla.scripts %>app.ts',
-                out: '<%= sla.scripts %>app.js'
+                src: '<%= sla.scripts %>app.ts'
+            }
+        },
+
+        clean: {
+            tsd: '<%= sla.tsd %>/**/*',
+            dist: '<%= sla.dist %>**/*'
+        },
+
+        copy: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= sla.app %>',
+                    dest: '<%= sla.dist %>',
+                    src: [
+                        '**/*',
+                        '!typings',
+                        '!typings/**/*',
+                        '!scripts/**/*.ts'
+                    ]
+                }]
             }
         }
     });
 
-    grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-tsd');
+    grunt.registerTask('setup', ['clean:tsd', 'tsd']);
 
-    grunt.registerTask('setup', ['tsd']);
-    grunt.registerTask('build', ['ts:clientMain']);
+    grunt.registerTask('build', ['clean:dist', 'ts:clientMain', 'copy:dist']);
     grunt.registerTask('default', ['build']);
 };
