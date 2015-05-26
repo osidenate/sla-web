@@ -2,7 +2,15 @@
 
 module.exports = function(grunt) {
 
+    var slaConfig = {
+        app: 'src/',
+        dist: 'dist/',
+        scripts: 'src/scripts/'
+    };
+
     grunt.initConfig({
+        sla: slaConfig,
+
         tsd: {
             refresh: {
                 options: {
@@ -12,6 +20,7 @@ module.exports = function(grunt) {
                 }
             }
         },
+
         ts: {
             options: {
                 compile: true,                  // perform compilation. [true (default) | false]
@@ -20,8 +29,8 @@ module.exports = function(grunt) {
                 declaration: false              // generate a declaration .d.ts file for every output js file. [true | false (default)]
             },
             clientMain: {
-                src: 'src/scripts/app.ts',
-                out: 'src/scripts/app.js'
+                src: '<%= sla.scripts %>app.ts',
+                out: '<%= sla.scripts %>app.js'
             }
         }
     });
