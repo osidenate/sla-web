@@ -2,7 +2,7 @@
 
 module.exports = function(grunt) {
     var slaConfig = {
-        app: 'src/',
+        src: 'src/',
         dist: 'dist/',
         scripts: 'src/scripts/',
         tsd: 'src/typings/'
@@ -12,6 +12,28 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         sla: slaConfig,
+
+        connect: {
+            dev: {
+                options: {
+                    port: 3200,
+                    base: {
+                        path: 'dist',
+                        options: {
+                            index: 'index.htm'
+                        }
+                    }
+                }
+            }
+        },
+
+        watch: {
+            // Rebuild project every time a file changes
+            server: {
+                files: ['<%= sla.src %>**/*'],
+                tasks: ['build']
+            }
+        },
 
         tsd: {
             refresh: {
@@ -49,10 +71,9 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= sla.app %>',
+                    cwd: '<%= sla.src %>',
                     dest: '<%= sla.dist %>',
                     src: '**/*'
-
                 }]
             }
         }
@@ -60,5 +81,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('setup', ['clean:tsd', 'tsd']);
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'ts:dist']);
+    grunt.registerTask('server', ['build', 'connect:dev', 'watch:server']);
+    grunt.registerTask('package', ['build', 'clean:package']);
     grunt.registerTask('default', ['build']);
 };
