@@ -31,14 +31,18 @@ module.exports = function(grunt) {
                 declaration: false,
                 sourceMap: false
             },
-            clientMain: {
-                src: '<%= sla.scripts %>app.ts'
+            dist: {
+                src: '<%= sla.dist %>/scripts/app.ts'
             }
         },
 
         clean: {
             tsd: '<%= sla.tsd %>/**/*',
-            dist: '<%= sla.dist %>**/*'
+            dist: '<%= sla.dist %>**/*',
+            package: [
+                '<%= sla.dist %>typings',
+                '<%= sla.dist %>scripts/**/*.ts'
+            ]
         },
 
         copy: {
@@ -47,19 +51,14 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= sla.app %>',
                     dest: '<%= sla.dist %>',
-                    src: [
-                        '**/*',
-                        '!typings',
-                        '!typings/**/*',
-                        '!scripts/**/*.ts'
-                    ]
+                    src: '**/*'
+
                 }]
             }
         }
     });
 
     grunt.registerTask('setup', ['clean:tsd', 'tsd']);
-
-    grunt.registerTask('build', ['clean:dist', 'ts:clientMain', 'copy:dist']);
+    grunt.registerTask('build', ['clean:dist', 'copy:dist', 'ts:dist']);
     grunt.registerTask('default', ['build']);
 };
