@@ -2,9 +2,7 @@
 SLA Monitor is a network quality monitoring system. 
 Right now, it only supports monitoring latency.
 It may support other monitoring types in the future (like bandwidth).
-In the future, I would like to have this service running on a few nodes in 
-different geographic locations and different ISPs.
-With enough data, over time, we can create a database of the quality of different ISPs.
+This system was created because I want to monitor the quality of my connection to the Internet.
 
 ### SLA Service
 The SLA service is used to monitor the latency between the a computer and other nodes.
