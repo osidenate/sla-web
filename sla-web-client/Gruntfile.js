@@ -51,7 +51,8 @@ module.exports = function(grunt) {
                 comments: false,
                 target: 'es5',
                 declaration: false,
-                sourceMap: false
+                sourceMap: false,
+                module: 'amd'
             },
             dist: {
                 src: '<%= sla.dist %>/scripts/app.ts'
