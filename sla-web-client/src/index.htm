@@ -3,12 +3,13 @@
     <head lang="en">
         <meta charset="UTF-8">
         <title></title>
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/firebase/firebase.js"></script>
-
-        <script src="scripts/app.js"></script>
     </head>
     <body>
         <p>SLA Test Client</p>
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
+        <script>
+            System.import('scripts/app');
+        </script>
     </body>
 </html>

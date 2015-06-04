@@ -5,11 +5,8 @@
   "path": "src/typings",
   "bundle": "src/typings/tsd.d.ts",
   "installed": {
-    "angularjs/angular.d.ts": {
-      "commit": "f23cd55e319a0f67362ca0dbc4cf3e2ec1339f4e"
-    },
-    "jquery/jquery.d.ts": {
-      "commit": "f23cd55e319a0f67362ca0dbc4cf3e2ec1339f4e"
+    "angular2/angular2.d.ts": {
+      "commit": "c50b111ded0a3a18b87b5abffea3150d6aca94da"
     }
   }
 }
