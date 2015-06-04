@@ -38,6 +38,9 @@ Install the npm dependencies:
 Install the bower dependencies:
 `bower install`
 
+Install jspm dependencies:
+`jspm install`
+
 Load the typescript definitions:
 `grunt setup`
 
