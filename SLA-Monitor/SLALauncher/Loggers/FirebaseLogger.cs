@@ -65,7 +65,9 @@ namespace LatencyMonitorService.Loggers
                     toDisplayName = toDisplayName
                 };
 
-                PushResponse pushTest = await _client.PushAsync("pings", pingInfo);
+                string zone = Utility.GetCurrentZoneName();
+
+                PushResponse pushTest = await _client.PushAsync("pings/" + zone, pingInfo);
             }
             catch (Exception ex)
             {
