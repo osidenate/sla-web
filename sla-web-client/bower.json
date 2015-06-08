@@ -12,6 +12,6 @@
   ],
   "dependencies": {
     "firebase": "~2.2.5",
-    "angular2": "~1.4.0"
+    "angular": "~1.4.0"
   }
 }
