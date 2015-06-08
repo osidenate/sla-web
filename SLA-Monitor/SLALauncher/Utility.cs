@@ -24,13 +24,5 @@ namespace LatencyMonitorService.Loggers
             string a4 = a3[0];
             return a4;
         }
-
-        /// <summary>
-        /// Gets the current "zone", which is a string that groups together pings by time 
-        /// </summary>
-        public static string GetCurrentZoneName()
-        {
-            return DateTime.UtcNow.ToString("yyyy-MM-dd-HH");
-        }
     }
 }
