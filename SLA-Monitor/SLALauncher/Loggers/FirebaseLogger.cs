@@ -39,18 +39,12 @@ namespace LatencyMonitorService.Loggers
             latencyMonitor.PingCompleted += OnPingCompleted;
         }
 
-        private async void OnPingCompleted(PingReply reply, string toDisplayName)
+        private async void OnPingCompleted(int configId, PingReply reply)
         {
             try
             {
                 dynamic pingInfo = new
                 {
-                    // Public IP Address of the server the latency monitor is on
-                    fromIpAddress = this.fromIpAddress,
-                    
-                    // The IP Address that we just pinged
-                    toIpAddress = reply.Address.ToString(),
-
                     // Latency in milliseconds
                     rtt = reply.RoundtripTime,
 
@@ -58,14 +52,10 @@ namespace LatencyMonitorService.Loggers
                     status = reply.Status.ToString(),
 
                     // Outputs an ISO-8601 formatted date
-                    datetime = DateTime.UtcNow.ToString("o"),
-
-                    fromDisplayName = this.fromDisplayName,
-
-                    toDisplayName = toDisplayName
+                    datetime = DateTime.UtcNow.ToString("o")
                 };
 
-                PushResponse pushTest = await _client.PushAsync("pings/", pingInfo);
+                await _client.UpdateAsync("/" + configId + "/latestPing", pingInfo);
             }
             catch (Exception ex)
             {

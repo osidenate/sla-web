@@ -21,7 +21,7 @@ namespace LatencyMonitorService.Loggers
             latencyMonitor.PingCompleted += OnPingCompleted;
         }
 
-        private void OnPingCompleted(PingReply reply, string toDisplayName)
+        private void OnPingCompleted(int configId, PingReply reply)
         {
             Console.WriteLine("Received Pong from " + reply.Address + ", RTT: " + reply.RoundtripTime + "ms.");
         }

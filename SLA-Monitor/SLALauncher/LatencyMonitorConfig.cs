@@ -9,10 +9,12 @@ namespace LatencyMonitorService.Loggers
 {
     public class LatencyMonitorConfig
     {
+        public readonly int ConfigId;
         public readonly string Host;
         public readonly int Interval;
         public readonly int Timeout;
-        public readonly string DisplayName;
+        public readonly string DisplayTo;
+        public readonly string DisplayFrom;
 
         public IPAddress IPAddress
         {
@@ -22,12 +24,14 @@ namespace LatencyMonitorService.Loggers
             }
         }
 
-        public LatencyMonitorConfig(string host, int interval, int timeout, string displayName)
+        public LatencyMonitorConfig(int configId, string host, int interval, int timeout, string displayTo, string displayFrom)
         {
+            this.ConfigId = configId;
             this.Host = host;
             this.Interval = interval;
             this.Timeout = timeout;
-            this.DisplayName = displayName;
+            this.DisplayTo = displayTo;
+            this.DisplayFrom = displayFrom;
         }
     }
 }

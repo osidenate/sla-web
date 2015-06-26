@@ -17,7 +17,7 @@ namespace LatencyMonitorService
     public class LatencyMonitor
     {
         public delegate void PingSendHandler(IPAddress host);
-        public delegate void PingResponseHandler(PingReply response, string toDisplayName);
+        public delegate void PingResponseHandler(int configId, PingReply response);
         public event PingSendHandler PingSent;
         public event PingResponseHandler PingCompleted;
 
@@ -26,6 +26,7 @@ namespace LatencyMonitorService
             get { return _pollingTimer.Enabled; } 
         }
 
+        private readonly int _configId;
         private readonly IPAddress _host;
         private readonly int _interval;
         private readonly int _timeout;
@@ -34,10 +35,11 @@ namespace LatencyMonitorService
 
         public LatencyMonitor(LatencyMonitorConfig config)
         {
+            _configId = config.ConfigId;
             _host = config.IPAddress;
             _interval = config.Interval;
             _timeout = config.Timeout;
-            _toDisplayName = config.DisplayName;
+            _toDisplayName = config.DisplayTo;
 
             _pollingTimer = new Timer(_interval);
             _pollingTimer.Elapsed += OnPingInterval;
@@ -79,7 +81,7 @@ namespace LatencyMonitorService
                 return;
             }
 
-            PingCompleted(response, _toDisplayName);
+            PingCompleted(_configId, response);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace LatencyMonitorService
             };
 
             var client = new FirebaseClient(config);
-            var response = await client.GetAsync("slaMonitorConfig");
+            var response = await client.GetAsync("/");
             return response.ResultAs<List<LatencyMonitorConfig>>();
         }
 
