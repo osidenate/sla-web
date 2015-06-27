@@ -1,4 +1,7 @@
 #live-monitor {
-    max-width: 480px;
-    border: 1px solid #ddd;
+}
+
+#live-monitor .monitor-inner {
+    padding: 10px 25px;
+    border: 1px solid #ccc;
 }
