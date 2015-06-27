@@ -3,13 +3,20 @@
     <head lang="en">
         <meta charset="UTF-8">
         <title>SLA Client Test Page</title>
+
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="components/live-monitor/live-monitor.css">
+    </head>
+    <body>
+        <div class="container">
+            <p>SLA Test Client</p>
+            <live-monitor config-id="0"></live-monitor>
+        </div>
+
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/firebase/firebase-debug.js"></script>
         <script src="bower_components/angularfire/dist/angularfire.js"></script>
-
-        <script src="scripts/app.js"></script>
-    </head>
-    <body>
-        <p>SLA Test Client</p>
+        <script src="components/app.js"></script>
+        <script src="components/live-monitor/live-monitor.js"></script>
     </body>
 </html>
