@@ -2,6 +2,25 @@
 }
 
 #live-monitor .monitor-inner {
-    padding: 10px 25px;
+    padding: 0 15px;
     border: 1px solid #ccc;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#live-monitor .row {
+    border-bottom: 1px solid #ddd;
+    line-height: 1.5em;
+}
+
+#live-monitor .row:last-child {
+    border-bottom: none;
+}
+
+#live-monitor .info-label {
+    display: inline-block;
+    font-size: 0.75em;
+    width: 55px;
+    padding: 3px 8px;
+    background-color: #eee;
+    border-right: 1px solid #ddd;
 }
