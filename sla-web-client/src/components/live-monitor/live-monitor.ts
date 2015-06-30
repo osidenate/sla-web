@@ -4,7 +4,8 @@ angular.module('sla')
     .directive('liveMonitor', [
         '$firebaseObject',
         'firebaseUrl',
-        function($firebaseObject, firebaseUrl) {
+        '$interval',
+        function($firebaseObject, firebaseUrl, $interval) {
             return {
                 scope: {
                     configId: '@'
@@ -13,31 +14,31 @@ angular.module('sla')
                 link: function(scope, iElement, iAttrs) {
                     // TODO Use $loaded promise to display loading spinner until component is loaded
 
-                    // Setup Firebase bindings
                     var monitorRef = new Firebase(firebaseUrl + scope.configId);
-                    scope.pingInfo = $firebaseObject(monitorRef);
+                    var pingInfo = $firebaseObject(monitorRef);
+                    var latestPing = $firebaseObject(monitorRef.child('latestPing'));
 
-                    scope.latestPing = $firebaseObject(monitorRef.child('latestPing'));
+                    var updateStatus = $interval(function() {
+                        // The monitor should be considered offline if it missed three consecutive status updates
+                        // The maximum time between a status update should be (pollInterval + timeout)
+                        // We also add 250ms to take into account network delays
+                        var pollInterval = pingInfo.interval;
+                        var timeout = pingInfo.timeout;
+                        var timedOutLength = 3 * (pollInterval + timeout) + 250;
 
-                    scope.getRtt = function() {
-                        return scope.latestPing.rtt;
-                    };
+                        var latestPingTime = new Date(latestPing.datetime).getTime();
+                        var offlineTime = Date.now() - timedOutLength;
 
-                    // TODO Shows 'offline' / 'online' fine when page is reloaded but
-                    // does not switch from online to offline when latency monitor stops
-                    // since no firebase event is sent (do we need to using polling instead?) $interval
-                    scope.getStatus = function() {
-                        var latestPingTime = new Date(scope.latestPing.datetime).getTime();
-                        var oneMinuteAgo = Date.now() - (60 * 1000);
+                        scope.monitorStatus = latestPingTime > offlineTime ? 'Online' : 'Offline';
+                    }, 250);
 
-                        // Monitor is online if the latest ping is less than a minute old
-                        if (latestPingTime > oneMinuteAgo) {
-                            return 'Live';
-                        }
-                        else {
-                            return 'Offline';
-                        }
-                    };
+                    scope.pingInfo = pingInfo;
+                    scope.latestPing = latestPing;
+                    scope.monitorStatus = '';
+
+                    iElement.on('$destory', function() {
+                        $interval.cancel(updateStatus);
+                    });
                 }
             };
         }

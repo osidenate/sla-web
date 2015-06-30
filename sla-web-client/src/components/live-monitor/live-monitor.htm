@@ -9,12 +9,16 @@
             <span>{{pingInfo.displayTo}}</span>
         </div>
         <div class="row">
-            <span class="info-label">Status</span>
-            <span>{{getStatus()}}</span>
+            <span class="info-label">Monitor Status</span>
+            <span>{{monitorStatus}}</span>
+        </div>
+        <div class="row">
+            <span class="info-label">Node Status</span>
+            <span>{{latestPing.status}}</span>
         </div>
         <div class="row">
             <span class="info-label">Latency</span>
-            <span>{{getRtt()}}ms</span>
+            <span>{{latestPing.rtt}}ms</span>
         </div>
     </div>
 </div>
