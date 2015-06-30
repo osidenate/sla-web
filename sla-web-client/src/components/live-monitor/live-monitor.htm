@@ -1,5 +1,5 @@
 <div id="live-monitor" class="col-sm-6">
-    <div class="monitor-inner">
+    <div class="monitor-inner" ng-if="finishedLoadingConfig">
         <div class="row">
             <span class="info-label">From</span>
             <span>{{pingInfo.displayFrom}}</span>
@@ -19,6 +19,12 @@
         <div class="row">
             <span class="info-label">Latency</span>
             <span>{{latestPing.rtt}}ms</span>
+        </div>
+    </div>
+
+    <div class="monitor-inner loading" ng-if="!finishedLoadingConfig">
+        <div class="row">
+            <span class="glyphicon glyphicon-refresh"></span>
         </div>
     </div>
 </div>
