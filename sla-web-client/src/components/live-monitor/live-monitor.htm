@@ -13,8 +13,8 @@
             <span>{{monitorStatus}}</span>
         </div>
         <div class="row">
-            <span class="info-label">Node Status</span>
-            <span>{{latestPing.status}}</span>
+            <span class="info-label">Ping Status</span>
+            <span>{{latestPing.status | pingStatus}}</span>
         </div>
         <div class="row">
             <span class="info-label">Latency</span>

@@ -24,6 +24,7 @@
     padding: 3px 8px;
     background-color: #eee;
     border-right: 1px solid #ddd;
+    cursor: default;
 }
 
 /* Loading screen */

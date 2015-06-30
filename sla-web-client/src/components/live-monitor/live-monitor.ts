@@ -6,6 +6,8 @@ angular.module('sla')
         'firebaseUrl',
         '$interval',
         function($firebaseObject, firebaseUrl, $interval) {
+            'use strict';
+
             return {
                 scope: {
                     configId: '@'
@@ -21,10 +23,10 @@ angular.module('sla')
                         .then(function() {
                             scope.finishedLoadingConfig = true;
 
+                            // The monitor should be considered offline if it missed three consecutive status updates
+                            // The maximum time between a status update should be (pollInterval + timeout)
+                            // We also add 250ms to take into account network delays
                             updateStatus = $interval(function() {
-                                // The monitor should be considered offline if it missed three consecutive status updates
-                                // The maximum time between a status update should be (pollInterval + timeout)
-                                // We also add 250ms to take into account network delays
                                 var pollInterval = pingInfo.interval;
                                 var timeout = pingInfo.timeout;
                                 var timedOutLength = 3 * (pollInterval + timeout) + 250;
@@ -39,7 +41,6 @@ angular.module('sla')
                     scope.finishedLoadingConfig = false;
                     scope.pingInfo = pingInfo;
                     scope.latestPing = latestPing;
-                    scope.monitorStatus = '';
 
                     iElement.on('$destory', function() {
                         $interval.cancel(updateStatus);
