@@ -1,23 +1,21 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-interface PingInfo extends AngularFireObject {
-    configId: number,
-    displayFrom: string,
-    displayTo: string,
-    host: string,
-    interval: number,
-    latestPing: LatestPing,
-    timeout: number,
-}
+module LiveMonitor {
+    interface PingInfo extends AngularFireObject {
+        configId: number,
+        displayFrom: string,
+        displayTo: string,
+        host: string,
+        interval: number,
+        latestPing: LatestPing,
+        timeout: number,
+    }
 
-interface LatestPing extends Object {
-    datetime: string,
-    rtt: number,
-    status: string
-}
-
-(function () {
-    'use strict';
+    interface LatestPing extends Object {
+        datetime: string,
+        rtt: number,
+        status: string
+    }
 
     /**
      * @description
@@ -26,7 +24,7 @@ interface LatestPing extends Object {
      * We expect a status update to come before (pollInterval + timeout).
      * Then we add 250ms to account for delays in networking.
      */
-    var _getMonitorStatus = function(pingInfo: PingInfo) {
+    var _getMonitorStatus = function (pingInfo: PingInfo) {
         var pollInterval = pingInfo.interval;
         var timeout = pingInfo.timeout;
         var latestPingTimeInMillis = pingInfo.latestPing.datetime;
@@ -41,20 +39,19 @@ interface LatestPing extends Object {
     /**
      * @description
      * Creates a real-time monitor of ping information supplied by a Firebase data source
-     * It expeced
      */
     angular.module('sla')
         .directive('liveMonitor', [
             '$firebaseObject',
             'firebaseUrl',
             '$interval',
-            function($firebaseObject, firebaseUrl, $interval) {
+            function ($firebaseObject, firebaseUrl, $interval) {
                 return {
                     scope: {
                         configId: '@'
                     },
                     templateUrl: 'components/live-monitor/live-monitor.htm',
-                    link: function(scope, iElement, iAttrs) {
+                    link: function (scope, iElement, iAttrs) {
                         if (typeof scope.configId === 'undefined') {
                             throw new Error('live-monitor: Missing required attribute "configId"');
                         }
@@ -65,10 +62,10 @@ interface LatestPing extends Object {
                         var updateStatus;
 
                         pingInfo.$loaded()
-                            .then(function() {
+                            .then(function () {
                                 scope.finishedLoadingConfig = true;
 
-                                updateStatus = $interval(function() {
+                                updateStatus = $interval(function () {
                                     scope.monitorStatus = _getMonitorStatus(pingInfo);
                                 }, 250);
                             });
@@ -77,11 +74,11 @@ interface LatestPing extends Object {
                         scope.pingInfo = pingInfo;
                         scope.latestPing = latestPing;
 
-                        iElement.on('$destory', function() {
+                        iElement.on('$destory', function () {
                             $interval.cancel(updateStatus);
                         });
                     }
                 };
             }
         ]);
-})();
+}
