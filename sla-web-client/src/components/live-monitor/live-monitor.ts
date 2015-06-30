@@ -27,7 +27,6 @@ interface LatestPing extends Object {
      * Then we add 250ms to account for delays in networking.
      */
     var _getMonitorStatus = function(pingInfo: PingInfo) {
-        // pollInterval, timeout, latestPingDatetime,
         var pollInterval = pingInfo.interval;
         var timeout = pingInfo.timeout;
         var latestPingTimeInMillis = pingInfo.latestPing.datetime;
@@ -38,7 +37,6 @@ interface LatestPing extends Object {
 
         return latestPingTime > cuttOffTime ? 'Online' : 'Offline';
     };
-
 
     /**
      * @description
