@@ -1,51 +1,89 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-angular.module('sla')
-    .directive('liveMonitor', [
-        '$firebaseObject',
-        'firebaseUrl',
-        '$interval',
-        function($firebaseObject, firebaseUrl, $interval) {
-            'use strict';
+interface PingInfo extends AngularFireObject {
+    configId: number,
+    displayFrom: string,
+    displayTo: string,
+    host: string,
+    interval: number,
+    latestPing: LatestPing,
+    timeout: number,
+}
 
-            return {
-                scope: {
-                    configId: '@'
-                },
-                templateUrl: 'components/live-monitor/live-monitor.htm',
-                link: function(scope, iElement, iAttrs) {
-                    var monitorRef = new Firebase(firebaseUrl + scope.configId);
-                    var pingInfo = $firebaseObject(monitorRef);
-                    var latestPing = $firebaseObject(monitorRef.child('latestPing'));
-                    var updateStatus;
+interface LatestPing extends Object {
+    datetime: string,
+    rtt: number,
+    status: string
+}
 
-                    pingInfo.$loaded()
-                        .then(function() {
-                            scope.finishedLoadingConfig = true;
+(function () {
+    'use strict';
 
-                            // The monitor should be considered offline if it missed three consecutive status updates
-                            // The maximum time between a status update should be (pollInterval + timeout)
-                            // We also add 250ms to take into account network delays
-                            updateStatus = $interval(function() {
-                                var pollInterval = pingInfo.interval;
-                                var timeout = pingInfo.timeout;
-                                var timedOutLength = 3 * (pollInterval + timeout) + 250;
+    /**
+     * @description
+     * Determines the status of the Latency Monitor based on the latest ping's timestamp.
+     * The monitor is considered offline if it missed three consecutive status updates.
+     * We expect a status update to come before (pollInterval + timeout).
+     * Then we add 250ms to account for delays in networking.
+     */
+    var _getMonitorStatus = function(pingInfo: PingInfo) {
+        // pollInterval, timeout, latestPingDatetime,
+        var pollInterval = pingInfo.interval;
+        var timeout = pingInfo.timeout;
+        var latestPingTimeInMillis = pingInfo.latestPing.datetime;
 
-                                var latestPingTime = new Date(latestPing.datetime).getTime();
-                                var offlineTime = Date.now() - timedOutLength;
+        var timedOutLength = 3 * (pollInterval + timeout) + 250;
+        var latestPingTime = new Date(latestPingTimeInMillis).getTime();
+        var cuttOffTime = Date.now() - timedOutLength;
 
-                                scope.monitorStatus = latestPingTime > offlineTime ? 'Online' : 'Offline';
-                            }, 250);
+        return latestPingTime > cuttOffTime ? 'Online' : 'Offline';
+    };
+
+
+    /**
+     * @description
+     * Creates a real-time monitor of ping information supplied by a Firebase data source
+     * It expeced
+     */
+    angular.module('sla')
+        .directive('liveMonitor', [
+            '$firebaseObject',
+            'firebaseUrl',
+            '$interval',
+            function($firebaseObject, firebaseUrl, $interval) {
+                return {
+                    scope: {
+                        configId: '@'
+                    },
+                    templateUrl: 'components/live-monitor/live-monitor.htm',
+                    link: function(scope, iElement, iAttrs) {
+                        if (typeof scope.configId === 'undefined') {
+                            throw new Error('live-monitor: Missing required attribute "configId"');
+                        }
+
+                        var monitorRef = new Firebase(firebaseUrl + scope.configId);
+                        var pingInfo = <PingInfo> $firebaseObject(monitorRef);
+                        var latestPing = <LatestPing> $firebaseObject(monitorRef.child('latestPing'));
+                        var updateStatus;
+
+                        pingInfo.$loaded()
+                            .then(function() {
+                                scope.finishedLoadingConfig = true;
+
+                                updateStatus = $interval(function() {
+                                    scope.monitorStatus = _getMonitorStatus(pingInfo);
+                                }, 250);
+                            });
+
+                        scope.finishedLoadingConfig = false;
+                        scope.pingInfo = pingInfo;
+                        scope.latestPing = latestPing;
+
+                        iElement.on('$destory', function() {
+                            $interval.cancel(updateStatus);
                         });
-
-                    scope.finishedLoadingConfig = false;
-                    scope.pingInfo = pingInfo;
-                    scope.latestPing = latestPing;
-
-                    iElement.on('$destory', function() {
-                        $interval.cancel(updateStatus);
-                    });
-                }
-            };
-        }
-    ]);
+                    }
+                };
+            }
+        ]);
+})();
