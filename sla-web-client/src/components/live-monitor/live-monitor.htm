@@ -20,6 +20,10 @@
             <span class="info-label">Latency</span>
             <span>{{getAverageRtt() | number: 0}}ms</span>
         </div>
+        <div class="row">
+            <span class="info-label">Jitter</span>
+            <span>{{getJitter() | number: 0}}ms</span>
+        </div>
     </div>
 
     <div class="monitor-inner loading" ng-if="!finishedLoadingConfig">

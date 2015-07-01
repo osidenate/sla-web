@@ -49,5 +49,18 @@ module LiveMonitor {
                 return current * weight + accumulator;
             }, 0);
         }
+
+        /**
+         * @returns The difference of the maximum latency and minimum latencies
+         */
+        getJitter (): number {
+            if (this.buffer.length <= 1) {
+                return 0;
+            }
+
+            var min = Math.min(...this.buffer);
+            var max = Math.max(...this.buffer);
+            return max - min;
+        }
     }
 }

@@ -87,6 +87,9 @@ module LiveMonitor {
                         scope.getAverageRtt = function() {
                             return latencyCalc.getMovingAverage();
                         };
+                        scope.getJitter = function() {
+                            return latencyCalc.getJitter();
+                        };
 
                         iElement.on('$destory', function () {
                             $interval.cancel(updateStatus);
