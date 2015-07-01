@@ -6,16 +6,16 @@
   "bundle": "src/typings/tsd.d.ts",
   "installed": {
     "angularjs/angular.d.ts": {
-      "commit": "2a5858c16563634453533009242b8e0b18521370"
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     },
     "jquery/jquery.d.ts": {
-      "commit": "2a5858c16563634453533009242b8e0b18521370"
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     },
     "angularfire/angularfire.d.ts": {
-      "commit": "8ebc099072402b1a80d205c3eece59bed963ad87"
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     },
     "firebase/firebase.d.ts": {
-      "commit": "8ebc099072402b1a80d205c3eece59bed963ad87"
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     }
   }
 }
