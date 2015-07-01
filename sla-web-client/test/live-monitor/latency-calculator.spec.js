@@ -24,20 +24,26 @@ describe('Latency Calculator', function() {
     it('should be able to calculate the exponential moving average of the most recent latencies', function() {
         latencyCalc = new LatencyCalculator(3);
 
+        expect(latencyCalc.getMovingAverage()).toEqual(0);
+
         // 100*(1/1) == 100
         latencyCalc.push(100);
         expect(latencyCalc.getMovingAverage()).toEqual(100);
 
-        // 100*(1/3) + 50*(2/3) == 66.6666
+        // 100*(1/3) + 50*(2/3) == 66.6666...
         latencyCalc.push(50);
-        expect(latencyCalc.getMovingAverage()).toEqual(66 + (2/3));
+        expect(latencyCalc.getMovingAverage()).toEqual(66.66666666666666);
 
-        // 100*(1/6) + 50*(2/6) + 150*(3/6) == 108.3333
+        // 100*(1/6) + 50*(2/6) + 150*(3/6) == 108.3333...
         latencyCalc.push(150);
-        expect(latencyCalc.getMovingAverage()).toEqual(108 + (2/3));
+        expect(latencyCalc.getMovingAverage()).toEqual(108.33333333333333);
 
-        // 50*(1/6) + 150*(2/6) + 25*(3/6) == 70.8333
+        // 50*(1/6) + 150*(2/6) + 25*(3/6) == 70.8333...
         latencyCalc.push(25);
-        expect(latencyCalc.getMovingAverage()).toEqual(70 + (5/6));
+        expect(latencyCalc.getMovingAverage()).toEqual(70.83333333333333);
+
+        // 150*(1/6) + 25*(2/6) + 1000*(3/6) == 533.3333...
+        latencyCalc.push(1000);
+        expect(latencyCalc.getMovingAverage()).toEqual(533.3333333333333);
     });
 });
