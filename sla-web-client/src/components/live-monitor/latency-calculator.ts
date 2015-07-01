@@ -1,5 +1,6 @@
-module LiveMonitor {
+/// <reference path="../../typings/tsd.d.ts" />
 
+module LiveMonitor {
     /**
      * @description
      * Stores the latest RTT's in a circular buffer.

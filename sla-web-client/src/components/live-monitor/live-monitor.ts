@@ -1,6 +1,10 @@
 /// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="latency-calculator.ts" />
 
 module LiveMonitor {
+    // Determines how many recent latencies are stored in the buffer
+    const _BUFFER_SIZE_: number = 10;
+
     interface PingInfo extends AngularFireObject {
         configId: number,
         displayFrom: string,
@@ -11,7 +15,7 @@ module LiveMonitor {
         timeout: number,
     }
 
-    interface LatestPing extends Object {
+    interface LatestPing extends AngularFireObject {
         datetime: string,
         rtt: number,
         status: string
@@ -56,6 +60,7 @@ module LiveMonitor {
                             throw new Error('live-monitor: Missing required attribute "configId"');
                         }
 
+                        var latencyCalc = new LatencyCalculator(_BUFFER_SIZE_);
                         var monitorRef = new Firebase(firebaseUrl + scope.configId);
                         var pingInfo = <PingInfo> $firebaseObject(monitorRef);
                         var latestPing = <LatestPing> $firebaseObject(monitorRef.child('latestPing'));
@@ -70,12 +75,23 @@ module LiveMonitor {
                                 }, 250);
                             });
 
+                        latestPing.$watch(function() {
+                            if (latestPing.status === 'Success') {
+                                latencyCalc.push(latestPing.rtt);
+                            }
+                        });
+
                         scope.finishedLoadingConfig = false;
                         scope.pingInfo = pingInfo;
                         scope.latestPing = latestPing;
+                        scope.getAverageRtt = function() {
+                            return latencyCalc.getMovingAverage();
+                        };
 
                         iElement.on('$destory', function () {
                             $interval.cancel(updateStatus);
+                            latestPing.$destroy();
+                            pingInfo.$destroy();
                         });
                     }
                 };
