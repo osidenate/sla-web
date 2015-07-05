@@ -4,7 +4,7 @@ describe('Latency Calculator', function() {
     var LatencyCalculator = LiveMonitor.LatencyCalculator;
     var latencyCalc;
 
-    it('should be able to remember the most recent latencies', function() {
+    it('should be able to remember the most recent latencies in a circular buffer', function() {
         latencyCalc = new LatencyCalculator(3);
 
         // The buffer should be full after these latencies are added
@@ -21,7 +21,7 @@ describe('Latency Calculator', function() {
         expect(latencyCalc.pointer).toEqual(2);
     });
 
-    it('should be able to calculate the exponential moving average of the most recent latencies', function() {
+    it('should be able to calculate the exponential moving average', function() {
         latencyCalc = new LatencyCalculator(3);
 
         expect(latencyCalc.getMovingAverage()).toEqual(0);
@@ -45,5 +45,13 @@ describe('Latency Calculator', function() {
         // 150*(1/6) + 25*(2/6) + 1000*(3/6) == 533.3333...
         latencyCalc.push(1000);
         expect(latencyCalc.getMovingAverage()).toEqual(533.3333333333333);
+    });
+
+    it('should be able to calculate the jitter', function() {
+        // TODO we need to create a formal specification for network jitter based on:
+        // https://en.wikipedia.org/wiki/Packet_delay_variation
+        // See also RFC 3393
+
+        expect(false).toBe(true);
     });
 });
