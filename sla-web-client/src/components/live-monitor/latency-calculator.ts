@@ -23,7 +23,7 @@ module LiveMonitor {
         }
 
         /**
-         * @returns The exponential moving average of the latencies in the buffer
+         * @returns Calculates the exponential moving average of the latencies in the buffer
          */
         getMovingAverage (): number {
             var buffer = this.buffer;

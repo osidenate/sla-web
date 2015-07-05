@@ -2,8 +2,7 @@
 /// <reference path="latency-calculator.ts" />
 
 module LiveMonitor {
-    // Determines how many recent latencies are stored in the buffer
-    const _BUFFER_SIZE_: number = 10;
+    const _DEFAULT_BUFFER_SIZE_: number = 25;
 
     interface PingInfo extends AngularFireObject {
         configId: number,
@@ -41,8 +40,9 @@ module LiveMonitor {
     };
 
     /**
-     * @description
      * Creates a real-time monitor of ping information supplied by a Firebase data source
+     * @param {number} configId - Allows us to specify which latency monitor to use
+     * @param {number} bufferSize - Allows us to specify how many pings to store in the latency calculator's buffer
      */
     angular.module('sla')
         .directive('liveMonitor', [
@@ -52,7 +52,8 @@ module LiveMonitor {
             function ($firebaseObject, firebaseUrl, $interval) {
                 return {
                     scope: {
-                        configId: '@'
+                        configId: '@',
+                        bufferSize: '@'
                     },
                     templateUrl: 'components/live-monitor/live-monitor.htm',
                     link: function (scope, iElement, iAttrs) {
@@ -60,7 +61,8 @@ module LiveMonitor {
                             throw new Error('live-monitor: Missing required attribute "configId"');
                         }
 
-                        var latencyCalc = new LatencyCalculator(_BUFFER_SIZE_);
+                        var bufferSize = scope.bufferSize || _DEFAULT_BUFFER_SIZE_;
+                        var latencyCalc = new LatencyCalculator(bufferSize);
                         var monitorRef = new Firebase(firebaseUrl + scope.configId);
                         var pingInfo = <PingInfo> $firebaseObject(monitorRef);
                         var latestPing = <LatestPing> $firebaseObject(monitorRef.child('latestPing'));
