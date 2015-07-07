@@ -17,7 +17,7 @@
                   }"></span>
             <span>{{monitorStatus}}</span>
         </div>
-        <div class="row">
+        <div class="row" ng-if="monitorStatus === 'Online'">
             <span class="info-label">Ping Status</span>
             <span class="glyphicon"
                   ng-class="{
@@ -26,13 +26,15 @@
                   }"></span>
             <span>{{latestPing.status | pingStatus}}</span>
         </div>
-        <div class="row">
-            <span class="info-label">Latency</span>
-            <span>{{getAverageRtt() | number: 1}}ms</span>
-        </div>
-        <div class="row">
-            <span class="info-label">Jitter</span>
-            <span>{{getJitter() | number: 0}}ms</span>
+        <div ng-if="monitorStatus === 'Online' && latestPing.status === 'Success'">
+            <div class="row">
+                <span class="info-label">Latency</span>
+                <span>{{getAverageRtt() | number: 1}}ms</span>
+            </div>
+            <div class="row">
+                <span class="info-label">Jitter</span>
+                <span>{{getJitter() | number: 0}}ms</span>
+            </div>
         </div>
     </div>
 
