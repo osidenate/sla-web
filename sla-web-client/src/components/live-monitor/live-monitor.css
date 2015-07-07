@@ -27,6 +27,16 @@
     cursor: default;
 }
 
+#live-monitor .glyphicon-ok {
+    color: darkgreen;
+    margin-right: 2px;
+}
+
+#live-monitor .glyphicon-remove {
+    color: darkred;
+    margin-right: 2px;
+}
+
 /* Loading screen */
 #live-monitor .loading {
     padding: 20px;

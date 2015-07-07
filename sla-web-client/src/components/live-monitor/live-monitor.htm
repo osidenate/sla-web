@@ -10,15 +10,25 @@
         </div>
         <div class="row">
             <span class="info-label">Monitor Status</span>
+            <span class="glyphicon"
+                  ng-class="{
+                      'glyphicon-ok': monitorStatus === 'Online',
+                      'glyphicon-remove': monitorStatus !== 'Online'
+                  }"></span>
             <span>{{monitorStatus}}</span>
         </div>
         <div class="row">
             <span class="info-label">Ping Status</span>
+            <span class="glyphicon"
+                  ng-class="{
+                      'glyphicon-ok': latestPing.status === 'Success',
+                      'glyphicon-remove': latestPing.status === 'TimedOut'
+                  }"></span>
             <span>{{latestPing.status | pingStatus}}</span>
         </div>
         <div class="row">
             <span class="info-label">Latency</span>
-            <span>{{getAverageRtt() | number: 0}}ms</span>
+            <span>{{getAverageRtt() | number: 1}}ms</span>
         </div>
         <div class="row">
             <span class="info-label">Jitter</span>
