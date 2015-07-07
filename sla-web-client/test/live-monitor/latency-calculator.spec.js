@@ -47,11 +47,37 @@ describe('Latency Calculator', function() {
         expect(latencyCalc.getMovingAverage()).toEqual(533.3333333333333);
     });
 
+    /**
+     * Jitter should be the MAX - MIN latency in the Latency Calculator buffer
+     */
     it('should be able to calculate the jitter', function() {
-        // TODO we need to create a formal specification for network jitter based on:
-        // https://en.wikipedia.org/wiki/Packet_delay_variation
-        // See also RFC 3393
+        latencyCalc = new LatencyCalculator(10);
 
-        expect(false).toBe(true);
+        // Defined to be 0
+        expect(latencyCalc.getJitter()).toEqual(0);
+
+        // 10 - 10 = 0
+        latencyCalc.push(10);
+        expect(latencyCalc.getJitter()).toEqual(0);
+
+        // 15 - 10 = 5
+        latencyCalc.push(15);
+        expect(latencyCalc.getJitter()).toEqual(5);
+
+        // 20 - 10 = 10
+        latencyCalc.push(20);
+        expect(latencyCalc.getJitter()).toEqual(10);
+
+        // 20 - 10 = 10
+        latencyCalc.push(15);
+        expect(latencyCalc.getJitter()).toEqual(10);
+
+        // 20 - 5 = 15
+        latencyCalc.push(5);
+        expect(latencyCalc.getJitter()).toEqual(15);
+
+        // 25 - 5 = 20
+        latencyCalc.push(25);
+        expect(latencyCalc.getJitter()).toEqual(20);
     });
 });
