@@ -28,7 +28,7 @@
         </div>
         <div ng-if="monitorStatus === 'Online' && latestPing.status === 'Success'">
             <div class="row">
-                <span class="info-label">Latency</span>
+                <span class="info-label">Avg Latency</span>
                 <span>{{getAverageRtt() | number: 1}}ms</span>
             </div>
             <div class="row">
