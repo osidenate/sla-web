@@ -11,10 +11,12 @@
     "bower_components"
   ],
   "dependencies": {
+    "polymer": "~1.0.6"
+  },
+  "devDependencies": {
     "firebase": "~2.2.5",
     "angular": "~1.4.0",
     "angularfire": "~1.1.1",
-    "bootstrap": "~3.3.5",
-    "polymer": "~1.0.6"
+    "bootstrap": "~3.3.5"
   }
 }

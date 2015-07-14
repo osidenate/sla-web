@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     var slaConfig = {
         src: 'src/',
         dist: 'dist/',
-        scripts: 'src/scripts/',
+        scripts: 'src/components/',
         tsd: 'src/typings/'
     };
 
@@ -55,16 +55,17 @@ module.exports = function(grunt) {
                 module: 'amd'
             },
             dist: {
-                src: '<%= sla.dist %>/scripts/app.ts'
+                src: '<%= sla.dist %>components/app.ts'
             }
         },
 
         clean: {
-            tsd: '<%= sla.tsd %>/**/*',
+            tsd: '<%= sla.tsd %>**/*',
             dist: '<%= sla.dist %>**/*',
             package: [
                 '<%= sla.dist %>typings',
-                '<%= sla.dist %>scripts/**/*.ts'
+                '<%= sla.dist %>components/**/*.ts',
+                '<%= sla.dist %>bower_components'
             ]
         },
 
@@ -73,16 +74,32 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= sla.src %>',
-                    dest: '<%= sla.dist %>',
-                    src: '**/*'
+                    src: '**/*',
+                    dest: '<%= sla.dist %>'
+                }]
+            },
+            fonts: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= sla.src %>bower_components/bootstrap/dist/fonts/',
+                    src: '**/*',
+                    dest: '<%= sla.dist %>fonts/'
                 }]
             }
+        },
+
+        useminPrepare: {
+            html: '<%= sla.dist %>latency-monitor-demo.htm'
+        },
+
+        usemin: {
+            html: '<%= sla.dist %>latency-monitor-demo.htm'
         }
     });
 
     grunt.registerTask('setup', ['clean:tsd', 'tsd']);
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'ts:dist']);
     grunt.registerTask('server', ['build', 'connect:dev', 'watch:server']);
-    grunt.registerTask('package', ['build', 'clean:package']);
+    grunt.registerTask('package', ['build', 'useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'usemin', 'copy:fonts', 'clean:package']);
     grunt.registerTask('default', ['build']);
 };
