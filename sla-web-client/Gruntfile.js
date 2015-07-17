@@ -89,11 +89,11 @@ module.exports = function(grunt) {
         },
 
         useminPrepare: {
-            html: '<%= sla.dist %>latency-monitor-demo.htm'
+            html: '<%= sla.dist %>index.htm'
         },
 
         usemin: {
-            html: '<%= sla.dist %>latency-monitor-demo.htm'
+            html: '<%= sla.dist %>index.htm'
         }
     });
 
@@ -101,5 +101,4 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'ts:dist']);
     grunt.registerTask('server', ['build', 'connect:dev', 'watch:server']);
     grunt.registerTask('package', ['build', 'useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'usemin', 'copy:fonts', 'clean:package']);
-    grunt.registerTask('default', ['build']);
 };
