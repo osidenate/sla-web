@@ -1,0 +1,46 @@
+<div id="live-monitor" class="col-sm-6">
+    <div class="monitor-inner" ng-if="finishedLoadingConfig">
+        <div class="row">
+            <span class="info-label">From</span>
+            <span>{{pingInfo.displayFrom}}</span>
+        </div>
+        <div class="row">
+            <span class="info-label">To</span>
+            <span>{{pingInfo.displayTo}}</span>
+        </div>
+        <div class="row">
+            <span class="info-label">Monitor Status</span>
+            <span class="glyphicon"
+                  ng-class="{
+                      'glyphicon-ok': monitorStatus === 'Online',
+                      'glyphicon-remove': monitorStatus !== 'Online'
+                  }"></span>
+            <span>{{monitorStatus}}</span>
+        </div>
+        <div class="row" ng-if="monitorStatus === 'Online'">
+            <span class="info-label">Ping Status</span>
+            <span class="glyphicon"
+                  ng-class="{
+                      'glyphicon-ok': latestPing.status === 'Success',
+                      'glyphicon-remove': latestPing.status === 'TimedOut'
+                  }"></span>
+            <span>{{latestPing.status | pingStatus}}</span>
+        </div>
+        <div ng-if="monitorStatus === 'Online' && latestPing.status === 'Success'">
+            <div class="row">
+                <span class="info-label">Avg Latency</span>
+                <span>{{getAverageRtt() | number: 1}}ms</span>
+            </div>
+            <div class="row">
+                <span class="info-label">Jitter</span>
+                <span>{{getJitter() | number: 0}}ms</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="monitor-inner loading" ng-if="!finishedLoadingConfig">
+        <div class="row">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </div>
+    </div>
+</div>
