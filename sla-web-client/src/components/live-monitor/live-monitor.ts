@@ -53,9 +53,15 @@ module LiveMonitor {
                 return {
                     scope: {
                         configId: '@',
-                        bufferSize: '@'
+                        bufferSize: '@',
+                        templateUrl: '@',
                     },
-                    templateUrl: 'components/live-monitor/live-monitor.htm',
+                    templateUrl: function(element, attr) {
+                        if (!attr.templateUrl) {
+                            throw "liveMonitor: Directive is missing the required attribute 'templateUrl'";
+                        }
+                        return attr.templateUrl;
+                    },
                     link: function (scope, iElement, iAttrs) {
                         if (typeof scope.configId === 'undefined') {
                             throw new Error('live-monitor: Missing required attribute "configId"');

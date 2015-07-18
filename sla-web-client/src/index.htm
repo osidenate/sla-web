@@ -6,12 +6,10 @@
 
         <title>Latency Monitor Demo</title>
 
-        <!-- build:css latency-monitor-lib.css -->
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-        <!-- endbuild -->
-
-        <!-- build:css latency-monitor.css -->
         <link rel="stylesheet" href="components/app.css">
+
+        <!-- build:css latency-monitor.min.css -->
         <link rel="stylesheet" href="components/live-monitor/live-monitor.css">
         <!-- endbuild -->
     </head>
@@ -40,20 +38,18 @@
 
         <div ng-app="sla" class="container">
             <h3 class="col-sm-12">Real-Time Status</h3>
-            <live-monitor config-id="0" buffer-size="5"></live-monitor>
-            <live-monitor config-id="1" buffer-size="5"></live-monitor>
-            <live-monitor config-id="2" buffer-size="5"></live-monitor>
-            <live-monitor config-id="3" buffer-size="5"></live-monitor>
-            <live-monitor config-id="4" buffer-size="5"></live-monitor>
+            <live-monitor config-id="0" buffer-size="5" template-url="components/live-monitor/live-monitor.htm"></live-monitor>
+            <live-monitor config-id="1" buffer-size="5" template-url="components/live-monitor/live-monitor.htm"></live-monitor>
+            <live-monitor config-id="2" buffer-size="5" template-url="components/live-monitor/live-monitor.htm"></live-monitor>
+            <live-monitor config-id="3" buffer-size="5" template-url="components/live-monitor/live-monitor.htm"></live-monitor>
+            <live-monitor config-id="4" buffer-size="5" template-url="components/live-monitor/live-monitor.htm"></live-monitor>
         </div>
 
-        <!-- build:js latency-monitor-lib.min.js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/firebase/firebase-debug.js"></script>
         <script src="bower_components/angularfire/dist/angularfire.js"></script>
-        <!-- endbuild -->
 
         <!-- build:js latency-monitor.min.js -->
         <script src="components/app.js"></script>
