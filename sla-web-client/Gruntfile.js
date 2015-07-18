@@ -64,8 +64,12 @@ module.exports = function(grunt) {
             dist: '<%= sla.dist %>**/*',
             package: [
                 '<%= sla.dist %>typings',
+                '<%= sla.dist %>components/**/*.css',
                 '<%= sla.dist %>components/**/*.ts',
-                '<%= sla.dist %>bower_components'
+                '<%= sla.dist %>components/**/*.js',
+                '<%= sla.dist %>bower_components',
+                '<%= sla.dist %>index.htm',
+                '.tmp'
             ]
         },
 
@@ -78,12 +82,19 @@ module.exports = function(grunt) {
                     dest: '<%= sla.dist %>'
                 }]
             },
-            fonts: {
+            // Grabs a copy of the concatenated JS and CSS before they are minified
+            concat: {
                 files: [{
                     expand: true,
-                    cwd: '<%= sla.src %>bower_components/bootstrap/dist/fonts/',
-                    src: '**/*',
-                    dest: '<%= sla.dist %>fonts/'
+                    cwd: '.tmp/concat/',
+                    src: [
+                        'latency-monitor.min.js',
+                        'latency-monitor.min.css'
+                    ],
+                    dest: '<%= sla.dist %>/',
+                    rename: function(dest, src) {
+                        return dest + src.replace('.min', '');
+                    }
                 }]
             }
         },
@@ -100,5 +111,14 @@ module.exports = function(grunt) {
     grunt.registerTask('setup', ['clean:tsd', 'tsd']);
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'ts:dist']);
     grunt.registerTask('server', ['build', 'connect:dev', 'watch:server']);
-    grunt.registerTask('package', ['build', 'useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'usemin', 'copy:fonts', 'clean:package']);
+    grunt.registerTask('package', [
+        'build',
+        'useminPrepare',
+        'concat:generated',
+        'copy:concat',
+        'cssmin:generated',
+        'uglify:generated',
+        'usemin',
+        'clean:package'
+    ]);
 };

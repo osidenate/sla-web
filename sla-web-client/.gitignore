@@ -5,3 +5,4 @@ dist
 src/bower_components
 src/typings
 src/components/**/*.js
+.tmp
