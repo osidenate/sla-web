@@ -1,12 +1,12 @@
 {
-  "name": "osidenate-sla-web-client",
-  "homepage": "https://github.com/osidenate/sla-monitor",
+  "name": "osidenate-sla-web",
+  "homepage": "https://github.com/osidenate/sla-web",
   "authors": [
     "Nathan Nelson <osidenate@gmail.com>"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/osidenate/sla-monitor.git"
+    "url": "git://github.com/osidenate/sla-web.git"
   },
   "ignore": [
     "**/.*",
