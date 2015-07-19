@@ -1,7 +1,0 @@
-.idea
-.tscache
-node_modules
-src/bower_components
-src/typings
-src/components/**/*.js
-.tmp
