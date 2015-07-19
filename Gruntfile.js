@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                 module: 'amd'
             },
             dist: {
-                src: '<%= sla.dist %>components/app.ts'
+                src: '<%= sla.dist %>components/**/*.ts'
             }
         },
 
