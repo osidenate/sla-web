@@ -1,45 +1,17 @@
 ## Overview
-SLA Monitor is a network quality monitoring system.
-Right now, it only supports monitoring latency.
-It may support other monitoring types in the future (like bandwidth).
-This system was created because I want to monitor the quality of my connection to the Internet.
+This project started as a way for me to measure the quality of my home internet connection. Specifically, I wanted to monitor the real-time status of my home server. 
 
-### SLA Service
-The SLA service is used to monitor the latency between the a computer and other nodes.
-It is a .NET Console application that loads it's configuration from Firebase
-and logs the latency information to Firebase.
+There are three components to this system:
+- **sla-monitor**: A .NET console application that measures & records latencies. This runs on my home server.
+- **sla-web**: An AngularJS application that can display the latencies recorded by sla-monitor in real-time.
+- **firebase**: Stores the configuration for sla-monitor and records the latest latencies.
 
-#### Initial Firebase Setup
-The latency monitor configuration should be stored in the specified format. To get started quickly,
-import this JSON directly into a new Firebase App. This will setup the latency monitors to target
-Google's DNS servers and Level 3.
+![SLA Monitor Diagram](http://websocks.net/img/sla-monitor-diagram.png)
 
-    [
-        {
-            "configId": 0,
-            "displayFrom": "Phoenix, AZ - Cox Communications",
-            "displayTo": "Google DNS",
-            "host": "8.8.8.8",
-            "interval": 4000,
-            "timeout": 3000,
-            "latestPing": {}
-        },
-        {
-            "configId": 1,
-            "displayFrom": "Phoenix, AZ - Cox Communications",
-            "displayTo": "Level 3 DNS",
-            "host": "4.2.2.1",
-            "interval": 4000,
-            "timeout": 3000,
-            "latestPing": {}
-        }
-    ]
+#### SLA Web Client Overview
+The SLA Web Client is used to view real-time data concerning the SLA Monitor. This project can be ran as a stand-alone webapp or it's live-monitor component can be consumed by a client app using bower.
 
-    
-### SLA Web Client
-The SLA Web Client is used to view real-time data concerning the SLA Monitor. It is a standalone web app.
-
-#### Setting up the SLA Web Client
+#### Setting up the SLA Web Client for Development
 Install the npm dependencies:
 `npm install`
 
@@ -49,5 +21,11 @@ Install the bower dependencies:
 Load the typescript definitions:
 `grunt setup`
 
-Build the project:
-`grunt build`
+Start the webserver:
+`grunt server`
+
+#### Packaging the sla-web
+sla-web can be packaged into a library so that it's components can be consumed by another app. This is how the component is integrated into the `websocks.net` website.
+
+Package the app: `grunt package`
+
