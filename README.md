@@ -9,7 +9,7 @@ There are three components to this system:
 ![SLA Monitor Diagram](http://websocks.net/img/sla-monitor-diagram.png)
 
 #### SLA Web Client Overview
-The SLA Web Client is used to view real-time data concerning the SLA Monitor. This project can be ran as a stand-alone webapp or it's live-monitor component can be consumed by a client app using bower.
+The SLA Web Client is used to view real-time data concerning the SLA Monitor. This project can be ran as a stand-alone webapp or it's live-monitor component can be consumed by a client app using bower. If you want to link this to your own `sla-monitor`, then you should fork this project and setup `sla-monitor` first.
 
 #### Setting up the SLA Web Client for Development
 Install the npm dependencies:
@@ -25,7 +25,6 @@ Start the webserver:
 `grunt server`
 
 #### Packaging the sla-web
-sla-web can be packaged into a library so that it's components can be consumed by another app. This is how the component is integrated into the `websocks.net` website.
+`sla-web` can be packaged into a library so that it's components can be consumed by another app. This is how the component is integrated into the `websocks.net` website.
 
-Package the app: `grunt package`
-
+Package the app by using: `grunt package`
