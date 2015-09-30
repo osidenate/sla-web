@@ -1,5 +1,10 @@
 ## Overview
-This project started as a way for me to measure the quality of my home internet connection. Specifically, I wanted to monitor the real-time status of my home server. 
+This project started as a way for me to measure the quality of my home internet connection. 
+I wanted to monitor the latency between my home server and other computers in real-time.
+
+This part of the system, sla-web, is an AngularJS webapp. 
+It connects with Firebase in order to retrieve the latency information in real-time.
+In order for this webapp to display useful information, sla-monitor needs to be running on the host that we want to monitor.
 
 There are three components to this system:
 - **sla-monitor**: A .NET console application that measures & records latencies. This runs on my home server.
@@ -8,10 +13,20 @@ There are three components to this system:
 
 ![SLA Monitor Diagram](http://websocks.net/img/sla-monitor-diagram.png)
 
-#### SLA Web Client Overview
-The SLA Web Client is used to view real-time data concerning the SLA Monitor. This project can be ran as a stand-alone webapp or it's live-monitor component can be consumed by a client app using bower. If you want to link this to your own `sla-monitor`, then you should fork this project and setup `sla-monitor` first.
+
+#### Technologies Used
+Part of the reason I created this project was to become more familiar with some of the latest front-end tools.
+This project is developed using TypeScript instead of JavaScript.
+The TypeScript is then transpiled into JavaScript using Grunt.
+See below for more information about the build process or just checkout `Gruntfile.js` to see exactly what's going on.
+
+Karma and Jasmine are used for unit testing some of the more complex parts of the app.
+For example, we unit test calculating the exponential moving average of recent latencies.
 
 #### Setting up the SLA Web Client for Development
+Get the Source:
+`git clone https://github.com/osidenate/sla-web.git`
+
 Install the npm dependencies:
 `npm install`
 
@@ -24,7 +39,7 @@ Load the typescript definitions:
 Start the webserver:
 `grunt server`
 
-#### Packaging the sla-web
-`sla-web` can be packaged into a library so that it's components can be consumed by another app. This is how the component is integrated into the `websocks.net` website.
+#### Packaging sla-web
+`sla-web` can be packaged into a library so that it's components can be consumed by another app.
 
 Package the app by using: `grunt package`
