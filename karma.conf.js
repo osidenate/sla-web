@@ -10,12 +10,12 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'src/bower_components/jquery/dist/jquery.js',
-            'src/bower_components/angular/angular.js',
-            'src/bower_components/firebase/firebase.js',
-            'src/bower_components/angularfire/dist/angularfire.js',
-            'src/components/app.js',
-            'src/components/**/*.js',
+            'dist/bower_components/jquery/dist/jquery.js',
+            'dist/bower_components/angular/angular.js',
+            'dist/bower_components/firebase/firebase.js',
+            'dist/bower_components/angularfire/dist/angularfire.js',
+            'dist/components/app.js',
+            'dist/components/**/*.js',
             'test/**/*.js'
         ],
 

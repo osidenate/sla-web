@@ -105,11 +105,18 @@ module.exports = function(grunt) {
 
         usemin: {
             html: '<%= sla.dist %>index.htm'
+        },
+
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
         }
     });
 
     grunt.registerTask('setup', ['clean:tsd', 'tsd']);
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'ts:dist']);
+    grunt.registerTask('test', ['build', 'karma']);
     grunt.registerTask('server', ['build', 'connect:dev', 'watch:server']);
     grunt.registerTask('package', [
         'build',
