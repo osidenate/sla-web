@@ -27,14 +27,14 @@ module LiveMonitor {
      * We expect a status update to come before (pollInterval + timeout).
      * Then we add 250ms to account for delays in networking.
      */
-    var _getMonitorStatus = function (pingInfo: PingInfo) {
-        var pollInterval = pingInfo.interval;
-        var timeout = pingInfo.timeout;
-        var latestPingTimeInMillis = pingInfo.latestPing.datetime;
+    let _getMonitorStatus = (pingInfo: PingInfo) => {
+        let pollInterval = pingInfo.interval;
+        let timeout = pingInfo.timeout;
+        let latestPingTimeInMillis = pingInfo.latestPing.datetime;
 
-        var timedOutLength = 3 * (pollInterval + timeout) + 250;
-        var latestPingTime = new Date(latestPingTimeInMillis).getTime();
-        var cuttOffTime = Date.now() - timedOutLength;
+        let timedOutLength = 3 * (pollInterval + timeout) + 250;
+        let latestPingTime = new Date(latestPingTimeInMillis).getTime();
+        let cuttOffTime = Date.now() - timedOutLength;
 
         return latestPingTime > cuttOffTime ? 'Online' : 'Offline';
     };
@@ -49,41 +49,40 @@ module LiveMonitor {
             '$firebaseObject',
             'firebaseUrl',
             '$interval',
-            function ($firebaseObject, firebaseUrl, $interval) {
+            ($firebaseObject, firebaseUrl, $interval) => {
                 return {
                     scope: {
                         configId: '@',
                         bufferSize: '@',
                         templateUrl: '@',
                     },
-                    templateUrl: function(element, attr) {
+                    templateUrl: (element, attr) => {
                         if (!attr.templateUrl) {
                             throw "liveMonitor: Directive is missing the required attribute 'templateUrl'";
                         }
                         return attr.templateUrl;
                     },
-                    link: function (scope, iElement, iAttrs) {
+                    link: (scope, iElement, iAttrs) => {
                         if (typeof scope.configId === 'undefined') {
                             throw new Error('live-monitor: Missing required attribute "configId"');
                         }
 
-                        var bufferSize = scope.bufferSize || _DEFAULT_BUFFER_SIZE_;
-                        var latencyCalc = new LatencyCalculator(bufferSize);
-                        var monitorRef = new Firebase(firebaseUrl + scope.configId);
-                        var pingInfo = <PingInfo> $firebaseObject(monitorRef);
-                        var latestPing = <LatestPing> $firebaseObject(monitorRef.child('latestPing'));
-                        var updateStatus;
+                        let bufferSize = scope.bufferSize || _DEFAULT_BUFFER_SIZE_;
+                        let latencyCalc = new LatencyCalculator(bufferSize);
+                        let monitorRef = new Firebase(firebaseUrl + scope.configId);
+                        let pingInfo = <PingInfo> $firebaseObject(monitorRef);
+                        let latestPing = <LatestPing> $firebaseObject(monitorRef.child('latestPing'));
+                        let updateStatus;
 
-                        pingInfo.$loaded()
-                            .then(function () {
-                                scope.finishedLoadingConfig = true;
+                        pingInfo.$loaded().then(() => {
+                            scope.finishedLoadingConfig = true;
 
-                                updateStatus = $interval(function () {
-                                    scope.monitorStatus = _getMonitorStatus(pingInfo);
-                                }, 250);
-                            });
+                            updateStatus = $interval(() => {
+                                scope.monitorStatus = _getMonitorStatus(pingInfo);
+                            }, 250);
+                        });
 
-                        latestPing.$watch(function() {
+                        latestPing.$watch(() => {
                             if (latestPing.status === 'Success') {
                                 latencyCalc.push(latestPing.rtt);
                             }
@@ -92,14 +91,10 @@ module LiveMonitor {
                         scope.finishedLoadingConfig = false;
                         scope.pingInfo = pingInfo;
                         scope.latestPing = latestPing;
-                        scope.getAverageRtt = function() {
-                            return latencyCalc.getMovingAverage();
-                        };
-                        scope.getJitter = function() {
-                            return latencyCalc.getJitter();
-                        };
+                        scope.getAverageRtt = () => latencyCalc.getMovingAverage();
+                        scope.getJitter = () => latencyCalc.getJitter();
 
-                        iElement.on('$destory', function () {
+                        iElement.on('$destory', () => {
                             $interval.cancel(updateStatus);
                             latestPing.$destroy();
                             pingInfo.$destroy();
